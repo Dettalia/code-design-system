@@ -1,0 +1,129 @@
+{
+  "color": {
+    "base": {
+      "white": {"value": "#FFFFFF"}
+    },
+    "dark": {
+      "dark-7": {"value": "#E7E8E9"},
+      "dark-4": {"value": "#71767D"}
+    },
+    "text": {
+      "primary": {"value": "#131a26"},
+      "secondary": {"value": "#71767d"},
+      "disabled": {"value": "#a1a3a8"}
+    },
+    "action": {
+      "hover": {"value": "#f7f7f7"},
+      "active-bg": {"value": "#fef0ea"},
+      "active-icon": {"value": "#f26835"}
+    },
+    "error": {
+      "default": {"value": "#f43641"},
+      "subtle": {"value": "#feeaec"}
+    },
+    "warning": {
+      "text": {"value": "#6b470f"},
+      "subtle": {"value": "#fff8c4"}
+    },
+    "neutral": {
+      "25": {"value": "#f7f7f7"}
+    },
+    "background": {
+      "surface": {"value": "#ffffff"}
+    },
+    "border": {
+      "disabled": {"value": "#e7e8e9"}
+    },
+    "button": {
+      "primary": {
+        "main": {"value": "#f26835"},
+        "on-primary": {"value": "#ffffff"}
+      }
+    }
+  },
+  "spacing": {
+    "1": {"value": "4"},
+    "2": {"value": "6"},
+    "3": {"value": "8"},
+    "5": {"value": "16"},
+    "component": {
+      "sm": {"value": "8"},
+      "lg": {"value": "16"}
+    }
+  },
+  "radius": {
+    "button": {"value": "4"},
+    "2xl": {"value": "16"},
+    "full": {"value": "9999"}
+  },
+  "typography": {
+    "body": {
+      "xxsmall": {
+        "regular": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 400,
+            "fontSize": 11,
+            "lineHeight": 16,
+            "letterSpacing": -1
+          }
+        }
+      },
+      "xsmall": {
+        "regular": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 400,
+            "fontSize": 13,
+            "lineHeight": 20,
+            "letterSpacing": -1
+          }
+        }
+      },
+      "small": {
+        "regular": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 400,
+            "fontSize": 14,
+            "lineHeight": 22,
+            "letterSpacing": -2
+          }
+        },
+        "medium": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 500,
+            "fontSize": 14,
+            "lineHeight": 22,
+            "letterSpacing": -2
+          }
+        },
+        "semibold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 600,
+            "fontSize": 14,
+            "lineHeight": 24,
+            "letterSpacing": -2
+          }
+        }
+      }
+    },
+    "subheading": {
+      "subheading-2": {
+        "value": {
+          "fontFamily": "Inter",
+          "fontWeight": 600,
+          "fontSize": 20,
+          "lineHeight": 30,
+          "letterSpacing": -2
+        }
+      }
+    }
+  },
+  "_meta": {
+    "source": "Figma — Bliro Design System (PNfRHPC6U3OTPIhKs9QMwv), node 12336:4485",
+    "note": "This covers only the variables actually referenced by that one frame/node — not necessarily every token in the whole file. letterSpacing is passed through exactly as Figma reported it; confirm whether it's px or % before wiring it into a Style Dictionary transform."
+  }
+}
