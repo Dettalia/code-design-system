@@ -54,7 +54,7 @@ export const muiThemeFormat = {
 
     return `${fileHeader([
       'This file maps Bliro design tokens onto an MUI theme so the web app and',
-      '@bliro/design-system share one source of truth.',
+      '@dettalia/design-system share one source of truth.',
     ])}
 import { createTheme, type ThemeOptions } from '@mui/material/styles';
 import type { CSSProperties } from 'react';

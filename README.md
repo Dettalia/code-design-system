@@ -1,4 +1,4 @@
-# @bliro/design-system
+# @dettalia/design-system
 
 Bliro's cross-platform design system for React Native and React Native Web.
 
@@ -19,6 +19,7 @@ npm run format
 npm test                   # jest
 npm run storybook          # browser preview at http://localhost:6006
 npm run build-storybook    # static Storybook build
+npm run changeset          # record a change for the next release
 ```
 
 ## Structure
@@ -108,3 +109,63 @@ RNTL v14 made `render` and interaction helpers **async by default** — `await r
 [.github/workflows/ci.yml](.github/workflows/ci.yml) runs on every pull request: install
 (`npm ci`), lint, test, and `build-storybook` (to catch build errors, not to deploy anything — the
 static output isn't published or uploaded anywhere). Any step failing fails the check.
+
+## Releasing
+
+Versioning and publishing go through [Changesets](https://github.com/changesets/changesets), and
+the package publishes to **GitHub Packages** (`https://npm.pkg.github.com`), not the public npm
+registry — see `publishConfig` in [package.json](package.json).
+
+**1. When you make a change that should ship, record it:**
+
+```bash
+npm run changeset
+```
+
+This prompts you to pick a bump type (patch/minor/major) and write a summary, then writes a file
+under `.changeset/`. Commit it alongside your change and open a PR as usual.
+
+**2. Once that PR merges to `main`,** [.github/workflows/release.yml](.github/workflows/release.yml)
+picks up the pending changeset(s) and opens (or updates) a **"Version Packages" PR** — bumping
+`package.json`, updating `CHANGELOG.md`, and consuming the changeset file(s). Nothing is published yet.
+
+**3. Once the "Version Packages" PR is merged,** the workflow runs again, finds no changesets left,
+and:
+
+- publishes `@dettalia/design-system` to `npm.pkg.github.com`
+- creates a GitHub Release (with the changelog entries) tagged `@dettalia/design-system@<version>`
+
+using the repo's own `GITHUB_TOKEN` — no extra secret needed for _publishing_ (GitHub Packages
+accepts the Actions token for the repo it belongs to). Installing the package elsewhere is a
+different story — see below.
+
+### One-time setup to install this package
+
+`npm install`/`npm ci` for `@dettalia/design-system` doesn't work out of the box outside this
+repo's own CI — GitHub Packages always requires authentication, even for a private-scope **read**.
+Each developer (or CI system) that wants to install it needs:
+
+1. **A GitHub Personal Access Token** with the `read:packages` scope (classic PAT — Settings →
+   Developer settings → Personal access tokens → Tokens (classic) → generate one with just that
+   scope checked).
+
+2. **A `.npmrc` entry** telling npm to resolve the `@dettalia` scope from GitHub Packages and how to
+   authenticate to it. Either add this to your **global** `~/.npmrc` (once, for your whole machine):
+
+   ```ini
+   @dettalia:registry=https://npm.pkg.github.com
+   //npm.pkg.github.com/:_authToken=YOUR_GITHUB_TOKEN_HERE
+   ```
+
+   or, to keep the token out of a file at all, put this in the **consuming project's** `.npmrc`
+   (safe to commit) and export `GITHUB_TOKEN` in your shell/CI environment instead:
+
+   ```ini
+   @dettalia:registry=https://npm.pkg.github.com
+   //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+   ```
+
+3. Then `npm install @dettalia/design-system` (or `react-native`/`react` peer deps as needed) works
+   normally.
+
+This is a one-time setup per machine/CI environment, not per install.

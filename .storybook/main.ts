@@ -2,7 +2,7 @@ import type {StorybookConfig} from '@storybook/react-webpack5';
 
 const config: StorybookConfig = {
   stories: ['../src/components/**/*.stories.tsx'],
-  addons: ['@storybook/addon-react-native-web'],
+  addons: ['@storybook/addon-react-native-web', '@storybook/addon-a11y'],
   framework: {
     name: '@storybook/react-webpack5',
     options: {},
