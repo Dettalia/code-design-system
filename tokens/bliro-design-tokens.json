@@ -1,0 +1,667 @@
+{
+  "color": {
+    "base": {
+      "white": {
+        "value": "#FFFFFF"
+      }
+    },
+    "bliro-orange": {
+      "1": {
+        "value": "#F26835"
+      },
+      "2": {
+        "value": "#F9855B"
+      },
+      "3": {
+        "value": "#FAA484"
+      },
+      "4": {
+        "value": "#FCC2AD"
+      },
+      "5": {
+        "value": "#FDE1D6"
+      },
+      "6": {
+        "value": "#FEF0EA"
+      },
+      "dark": {
+        "value": "#A44725"
+      },
+      "orage-1-30%": {
+        "value": "#FBD2C2"
+      }
+    },
+    "red": {
+      "1": {
+        "value": "#F43641"
+      },
+      "2": {
+        "value": "#F65B64"
+      },
+      "3": {
+        "value": "#F9848A"
+      },
+      "4": {
+        "value": "#FBADB1"
+      },
+      "5": {
+        "value": "#FDD6D8"
+      },
+      "6": {
+        "value": "#FEEAEC"
+      },
+      "dark": {
+        "value": "#A5252E"
+      }
+    },
+    "green": {
+      "1": {
+        "value": "#00BC8F"
+      },
+      "2": {
+        "value": "#33CAA6"
+      },
+      "3": {
+        "value": "#66D7BC"
+      },
+      "4": {
+        "value": "#80DEC7"
+      },
+      "5": {
+        "value": "#CCF2E9"
+      },
+      "6": {
+        "value": "#E5F8F4"
+      },
+      "dark": {
+        "value": "#008164"
+      }
+    },
+    "blue": {
+      "1": {
+        "value": "#1A60E7"
+      },
+      "2": {
+        "value": "#4880EC"
+      },
+      "3": {
+        "value": "#76A0F1"
+      },
+      "4": {
+        "value": "#A3BFF5"
+      },
+      "5": {
+        "value": "#D1DFFA"
+      },
+      "6": {
+        "value": "#E8EFFD"
+      },
+      "dark": {
+        "value": "#1242A2"
+      }
+    },
+    "yellow": {
+      "1": {
+        "value": "#F49F21"
+      },
+      "2": {
+        "value": "#F6B24D"
+      },
+      "3": {
+        "value": "#F8C57A"
+      },
+      "4": {
+        "value": "#F9CF90"
+      },
+      "5": {
+        "value": "#FDECD3"
+      },
+      "6": {
+        "value": "#FEF5E9"
+      },
+      "dark": {
+        "value": "#A56D17"
+      }
+    },
+    "dark": {
+      "20": {
+        "value": "#C7CAD2"
+      },
+      "90": {
+        "value": "#262A35"
+      },
+      "dark-1": {
+        "value": "#131A26"
+      },
+      "dark-2": {
+        "value": "#2B313C"
+      },
+      "dark-3": {
+        "value": "#F7F7F7"
+      },
+      "dark-4": {
+        "value": "#71767D"
+      },
+      "dark-5": {
+        "value": "#A1A3A8"
+      },
+      "dark-6": {
+        "value": "#D0D1D4"
+      },
+      "dark-7": {
+        "value": "#E7E8E9"
+      },
+      "dark-8": {
+        "value": "#EFF0F0"
+      },
+      "dark-9": {
+        "value": "#F7F7F7"
+      }
+    },
+    "text": {
+      "secondary": {
+        "value": "#71767d"
+      },
+      "tertiary": {
+        "value": "#d0d1d4"
+      },
+      "disabled": {
+        "value": "#a1a3a8"
+      }
+    },
+    "border": {
+      "default": {
+        "value": "#d0d1d4"
+      },
+      "disabled": {
+        "value": "#e7e8e9"
+      },
+      "focus": {
+        "value": "#f268354d"
+      }
+    },
+    "background": {
+      "disabled": {
+        "value": "#eff0f0"
+      }
+    },
+    "action": {
+      "hover": {
+        "value": "#f7f7f7"
+      }
+    },
+    "error": {
+      "default": {
+        "value": "#f43641"
+      },
+      "text": {
+        "value": "#a5252e"
+      }
+    },
+    "button": {
+      "primary": {
+        "main": {
+          "value": "#f26835"
+        },
+        "on-primary": {
+          "value": "#ffffff"
+        },
+        "hovered": {
+          "value": "#cb572d"
+        },
+        "pressed": {
+          "value": "#a44725"
+        }
+      },
+      "tonal": {
+        "main": {
+          "value": "#fef0ea"
+        },
+        "on-tonal": {
+          "value": "#f26835"
+        },
+        "hover": {
+          "value": "#fde1d6"
+        },
+        "pressed": {
+          "value": "#fcc2ad"
+        }
+      },
+      "outlined": {
+        "border": {
+          "value": "#d0d1d4"
+        },
+        "on-outlined": {
+          "value": "#131a26"
+        },
+        "hover": {
+          "value": "#f7f7f7"
+        },
+        "pressed": {
+          "value": "#d0d1d4"
+        },
+        "border-pressed": {
+          "value": "#71767d"
+        }
+      },
+      "text": {
+        "on-text": {
+          "value": "#131a26"
+        },
+        "hover": {
+          "value": "#f7f7f7"
+        },
+        "pressed": {
+          "value": "#d0d1d4"
+        }
+      }
+    }
+  },
+  "spacing": {
+    "2": {
+      "value": "6"
+    },
+    "3": {
+      "value": "8"
+    },
+    "4": {
+      "value": "12"
+    },
+    "5": {
+      "value": "16"
+    },
+    "component": {
+      "xxs": {
+        "value": "6"
+      },
+      "sm": {
+        "value": "8"
+      },
+      "md": {
+        "value": "12"
+      },
+      "lg": {
+        "value": "16"
+      },
+      "xl": {
+        "value": "24"
+      }
+    }
+  },
+  "radius": {
+    "button": {
+      "value": "4"
+    },
+    "lg": {
+      "value": "8"
+    }
+  },
+  "typography": {
+    "heading": {
+      "h1": {
+        "value": {
+          "fontFamily": "Inter",
+          "fontWeight": 700,
+          "fontSize": 48,
+          "lineHeight": 64,
+          "letterSpacing": -2
+        }
+      },
+      "h2": {
+        "value": {
+          "fontFamily": "Inter",
+          "fontWeight": 600,
+          "fontSize": 40,
+          "lineHeight": 56,
+          "letterSpacing": -2
+        }
+      },
+      "h3": {
+        "value": {
+          "fontFamily": "Inter",
+          "fontWeight": 600,
+          "fontSize": 36,
+          "lineHeight": 48,
+          "letterSpacing": -2
+        }
+      },
+      "h4": {
+        "value": {
+          "fontFamily": "Inter",
+          "fontWeight": 600,
+          "fontSize": 32,
+          "lineHeight": 40,
+          "letterSpacing": -2
+        }
+      }
+    },
+    "subheading": {
+      "subheading-1": {
+        "value": {
+          "fontFamily": "Inter",
+          "fontWeight": 600,
+          "fontSize": 24,
+          "lineHeight": 36,
+          "letterSpacing": -2
+        }
+      },
+      "subheading-2": {
+        "value": {
+          "fontFamily": "Inter",
+          "fontWeight": 600,
+          "fontSize": 20,
+          "lineHeight": 30,
+          "letterSpacing": -2
+        }
+      },
+      "subheading-3": {
+        "value": {
+          "fontFamily": "Inter",
+          "fontWeight": 700,
+          "fontSize": 16,
+          "lineHeight": 24,
+          "letterSpacing": -1
+        }
+      },
+      "subheading-4": {
+        "value": {
+          "fontFamily": "Inter",
+          "fontWeight": 700,
+          "fontSize": 13,
+          "lineHeight": 18,
+          "letterSpacing": -1
+        }
+      }
+    },
+    "body": {
+      "large": {
+        "regular": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 400,
+            "fontSize": 18,
+            "lineHeight": 26,
+            "letterSpacing": -2
+          }
+        },
+        "medium": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 500,
+            "fontSize": 18,
+            "lineHeight": 26,
+            "letterSpacing": -2
+          }
+        },
+        "semibold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 600,
+            "fontSize": 18,
+            "lineHeight": 26,
+            "letterSpacing": -2
+          }
+        },
+        "bold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 700,
+            "fontSize": 18,
+            "lineHeight": 26,
+            "letterSpacing": -2
+          }
+        },
+        "extrabold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 800,
+            "fontSize": 18,
+            "lineHeight": 26,
+            "letterSpacing": -2
+          }
+        }
+      },
+      "normal": {
+        "regular": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 400,
+            "fontSize": 16,
+            "lineHeight": 24,
+            "letterSpacing": -2
+          }
+        },
+        "medium": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 500,
+            "fontSize": 16,
+            "lineHeight": 24,
+            "letterSpacing": -2
+          }
+        },
+        "semibold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 600,
+            "fontSize": 16,
+            "lineHeight": 24,
+            "letterSpacing": -2
+          }
+        },
+        "bold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 700,
+            "fontSize": 16,
+            "lineHeight": 24,
+            "letterSpacing": -2
+          }
+        },
+        "extrabold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 800,
+            "fontSize": 16,
+            "lineHeight": 24,
+            "letterSpacing": -2
+          }
+        }
+      },
+      "small": {
+        "regular": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 400,
+            "fontSize": 14,
+            "lineHeight": 22,
+            "letterSpacing": -2
+          }
+        },
+        "medium": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 500,
+            "fontSize": 14,
+            "lineHeight": 22,
+            "letterSpacing": -2
+          }
+        },
+        "semibold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 600,
+            "fontSize": 14,
+            "lineHeight": 24,
+            "letterSpacing": -2
+          }
+        },
+        "bold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 700,
+            "fontSize": 14,
+            "lineHeight": 22,
+            "letterSpacing": -2
+          }
+        },
+        "extrabold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 800,
+            "fontSize": 14,
+            "lineHeight": 22,
+            "letterSpacing": -2
+          }
+        }
+      },
+      "xsmall": {
+        "regular": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 400,
+            "fontSize": 13,
+            "lineHeight": 20,
+            "letterSpacing": -1
+          }
+        },
+        "medium": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 500,
+            "fontSize": 13,
+            "lineHeight": 18,
+            "letterSpacing": -1
+          }
+        },
+        "semibold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 600,
+            "fontSize": 13,
+            "lineHeight": 20,
+            "letterSpacing": -1
+          }
+        },
+        "bold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 700,
+            "fontSize": 13,
+            "lineHeight": 18,
+            "letterSpacing": -1
+          }
+        },
+        "extrabold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 800,
+            "fontSize": 13,
+            "lineHeight": 18,
+            "letterSpacing": -1
+          }
+        }
+      },
+      "xxsmall": {
+        "regular": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 400,
+            "fontSize": 11,
+            "lineHeight": 16,
+            "letterSpacing": -1
+          }
+        },
+        "medium": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 500,
+            "fontSize": 11,
+            "lineHeight": 16,
+            "letterSpacing": -1
+          }
+        },
+        "semibold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 600,
+            "fontSize": 11,
+            "lineHeight": 16,
+            "letterSpacing": -1
+          }
+        },
+        "bold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 700,
+            "fontSize": 11,
+            "lineHeight": 16,
+            "letterSpacing": -1
+          }
+        },
+        "extrabold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 800,
+            "fontSize": 11,
+            "lineHeight": 16,
+            "letterSpacing": -1
+          }
+        }
+      }
+    },
+    "mobile": {
+      "nav-bar": {
+        "regular": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 400,
+            "fontSize": 10,
+            "lineHeight": 12,
+            "letterSpacing": -2
+          }
+        },
+        "medium": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 500,
+            "fontSize": 10,
+            "lineHeight": 12,
+            "letterSpacing": -2
+          }
+        },
+        "semibold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 600,
+            "fontSize": 10,
+            "lineHeight": 12,
+            "letterSpacing": -2
+          }
+        },
+        "bold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 700,
+            "fontSize": 10,
+            "lineHeight": 12,
+            "letterSpacing": -2
+          }
+        },
+        "extrabold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 800,
+            "fontSize": 10,
+            "lineHeight": 12,
+            "letterSpacing": -2
+          }
+        }
+      }
+    }
+  },
+  "_meta": {
+    "source": "Figma — Bliro Design System (PNfRHPC6U3OTPIhKs9QMwv), page 2619:9731 — frames Colors (10602:29017), Typography (10604:32646), Buttons (10604:33080)",
+    "note": "Covers only variables referenced by those three frames. Figma naming quirks kept as-is: \"bliro Orage - 1 - 30%\" typo, Dark - 3 and Dark - 9 share #F7F7F7, and body/small/semibold + body/xsmall/regular|semibold line heights differ from sibling weights. letterSpacing passed through exactly as Figma reported it (likely %). Not wired into Style Dictionary — tokens/figma-export.json remains the build source."
+  }
+}
