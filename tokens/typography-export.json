@@ -1,0 +1,262 @@
+{
+  "typography": {
+    "body": {
+      "xxsmall": {
+        "medium": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 500,
+            "fontSize": 11,
+            "lineHeight": 16,
+            "letterSpacing": -1
+          }
+        },
+        "semibold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 600,
+            "fontSize": 11,
+            "lineHeight": 16,
+            "letterSpacing": -1
+          }
+        },
+        "bold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 700,
+            "fontSize": 11,
+            "lineHeight": 16,
+            "letterSpacing": -1
+          }
+        },
+        "extrabold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 800,
+            "fontSize": 11,
+            "lineHeight": 16,
+            "letterSpacing": -1
+          }
+        }
+      },
+      "xsmall": {
+        "medium": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 500,
+            "fontSize": 13,
+            "lineHeight": 18,
+            "letterSpacing": -1
+          }
+        },
+        "bold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 700,
+            "fontSize": 13,
+            "lineHeight": 18,
+            "letterSpacing": -1
+          }
+        },
+        "extrabold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 800,
+            "fontSize": 13,
+            "lineHeight": 18,
+            "letterSpacing": -1
+          }
+        }
+      },
+      "small": {
+        "bold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 700,
+            "fontSize": 14,
+            "lineHeight": 22,
+            "letterSpacing": -2
+          }
+        },
+        "extrabold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 800,
+            "fontSize": 14,
+            "lineHeight": 22,
+            "letterSpacing": -2
+          }
+        }
+      },
+      "normal": {
+        "regular": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 400,
+            "fontSize": 16,
+            "lineHeight": 24,
+            "letterSpacing": -2
+          }
+        },
+        "medium": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 500,
+            "fontSize": 16,
+            "lineHeight": 24,
+            "letterSpacing": -2
+          }
+        },
+        "bold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 700,
+            "fontSize": 16,
+            "lineHeight": 24,
+            "letterSpacing": -2
+          }
+        },
+        "extrabold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 800,
+            "fontSize": 16,
+            "lineHeight": 24,
+            "letterSpacing": -2
+          }
+        }
+      },
+      "large": {
+        "regular": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 400,
+            "fontSize": 18,
+            "lineHeight": 26,
+            "letterSpacing": -2
+          }
+        },
+        "medium": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 500,
+            "fontSize": 18,
+            "lineHeight": 26,
+            "letterSpacing": -2
+          }
+        },
+        "semibold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 600,
+            "fontSize": 18,
+            "lineHeight": 26,
+            "letterSpacing": -2
+          }
+        },
+        "bold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 700,
+            "fontSize": 18,
+            "lineHeight": 26,
+            "letterSpacing": -2
+          }
+        },
+        "extrabold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 800,
+            "fontSize": 18,
+            "lineHeight": 26,
+            "letterSpacing": -2
+          }
+        }
+      }
+    },
+    "heading": {
+      "h1": {
+        "value": {
+          "fontFamily": "Inter",
+          "fontWeight": 700,
+          "fontSize": 48,
+          "lineHeight": 64,
+          "letterSpacing": -2
+        }
+      },
+      "h2": {
+        "value": {
+          "fontFamily": "Inter",
+          "fontWeight": 600,
+          "fontSize": 40,
+          "lineHeight": 56,
+          "letterSpacing": -2
+        }
+      },
+      "h3": {
+        "value": {
+          "fontFamily": "Inter",
+          "fontWeight": 600,
+          "fontSize": 36,
+          "lineHeight": 48,
+          "letterSpacing": -2
+        }
+      },
+      "h4": {
+        "value": {
+          "fontFamily": "Inter",
+          "fontWeight": 600,
+          "fontSize": 32,
+          "lineHeight": 40,
+          "letterSpacing": -2
+        }
+      }
+    },
+    "subheading": {
+      "subheading-1": {
+        "value": {
+          "fontFamily": "Inter",
+          "fontWeight": 600,
+          "fontSize": 24,
+          "lineHeight": 36,
+          "letterSpacing": -2
+        }
+      },
+      "subheading-3": {
+        "value": {
+          "fontFamily": "Inter",
+          "fontWeight": 700,
+          "fontSize": 16,
+          "lineHeight": 24,
+          "letterSpacing": -1
+        }
+      },
+      "subheading-4": {
+        "value": {
+          "fontFamily": "Inter",
+          "fontWeight": 700,
+          "fontSize": 13,
+          "lineHeight": 18,
+          "letterSpacing": -1
+        }
+      }
+    },
+    "mobile": {
+      "navBar": {
+        "regular": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 400,
+            "fontSize": 10,
+            "lineHeight": 12,
+            "letterSpacing": -2
+          }
+        }
+      }
+    }
+  },
+  "_typographyExportMeta": {
+    "source": "Figma — Bliro Design System (PNfRHPC6U3OTPIhKs9QMwv), node 2619:9731 (✏️ Design System page / Typography frame)",
+    "note": "Adds the weight variants (medium/bold/extrabold), the Large body size, Headings 1-4, Subheadings 1/3/4, and the mobile nav-bar style that weren't in the original narrow figma-export.json. Deliberately does not redeclare xxsmall/xsmall/small/normal 'regular' or existing weights, or subheading-2, which already live in figma-export.json with matching values — merged in via Style Dictionary's multi-source support (see style-dictionary/sd.config.mjs)."
+  }
+}

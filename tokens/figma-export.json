@@ -19,7 +19,8 @@
     },
     "error": {
       "default": {"value": "#f43641"},
-      "subtle": {"value": "#feeaec"}
+      "subtle": {"value": "#feeaec"},
+      "text": {"value": "#a5252e"}
     },
     "warning": {
       "text": {"value": "#6b470f"},
@@ -29,15 +30,37 @@
       "25": {"value": "#f7f7f7"}
     },
     "background": {
-      "surface": {"value": "#ffffff"}
+      "surface": {"value": "#ffffff"},
+      "disabled": {"value": "#eff0f0"}
     },
     "border": {
-      "disabled": {"value": "#e7e8e9"}
+      "disabled": {"value": "#e7e8e9"},
+      "focus": {"value": "#f268354d"}
     },
     "button": {
       "primary": {
         "main": {"value": "#f26835"},
-        "on-primary": {"value": "#ffffff"}
+        "on-primary": {"value": "#ffffff"},
+        "hovered": {"value": "#cb572d"},
+        "pressed": {"value": "#a44725"}
+      },
+      "tonal": {
+        "main": {"value": "#fef0ea"},
+        "on-tonal": {"value": "#f26835"},
+        "hover": {"value": "#fde1d6"},
+        "pressed": {"value": "#fcc2ad"}
+      },
+      "outlined": {
+        "border": {"value": "#d0d1d4"},
+        "on-outlined": {"value": "#131a26"},
+        "hover": {"value": "#f7f7f7"},
+        "pressed": {"value": "#d0d1d4"},
+        "border-pressed": {"value": "#71767d"}
+      },
+      "text": {
+        "on-text": {"value": "#131a26"},
+        "hover": {"value": "#f7f7f7"},
+        "pressed": {"value": "#d0d1d4"}
       }
     }
   },
@@ -45,14 +68,19 @@
     "1": {"value": "4"},
     "2": {"value": "6"},
     "3": {"value": "8"},
+    "4": {"value": "12"},
     "5": {"value": "16"},
     "component": {
+      "xxs": {"value": "6"},
       "sm": {"value": "8"},
-      "lg": {"value": "16"}
+      "md": {"value": "12"},
+      "lg": {"value": "16"},
+      "xl": {"value": "24"}
     }
   },
   "radius": {
     "button": {"value": "4"},
+    "lg": {"value": "8"},
     "2xl": {"value": "16"},
     "full": {"value": "9999"}
   },
@@ -74,6 +102,15 @@
           "value": {
             "fontFamily": "Inter",
             "fontWeight": 400,
+            "fontSize": 13,
+            "lineHeight": 20,
+            "letterSpacing": -1
+          }
+        },
+        "semibold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 600,
             "fontSize": 13,
             "lineHeight": 20,
             "letterSpacing": -1
@@ -108,6 +145,17 @@
             "letterSpacing": -2
           }
         }
+      },
+      "normal": {
+        "semibold": {
+          "value": {
+            "fontFamily": "Inter",
+            "fontWeight": 600,
+            "fontSize": 16,
+            "lineHeight": 24,
+            "letterSpacing": -2
+          }
+        }
       }
     },
     "subheading": {
@@ -123,7 +171,7 @@
     }
   },
   "_meta": {
-    "source": "Figma — Bliro Design System (PNfRHPC6U3OTPIhKs9QMwv), node 12336:4485",
-    "note": "This covers only the variables actually referenced by that one frame/node — not necessarily every token in the whole file. letterSpacing is passed through exactly as Figma reported it; confirm whether it's px or % before wiring it into a Style Dictionary transform."
+    "source": "Figma — Bliro Design System (PNfRHPC6U3OTPIhKs9QMwv), nodes 12336:4485 and 12265:4048 (Button_v2)",
+    "note": "This covers only the variables actually referenced by those frames/nodes — not necessarily every token in the whole file. letterSpacing is passed through exactly as Figma reported it; confirm whether it's px or % before wiring it into a Style Dictionary transform."
   }
 }
