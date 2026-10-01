@@ -1,3 +1,9 @@
+// Only used by Jest (via babel-jest). The library build uses tsup/esbuild and
+// Storybook uses Vite.
 module.exports = {
-  presets: ['module:@react-native/babel-preset'],
+  presets: [
+    ['@babel/preset-env', {targets: {node: 'current'}}],
+    ['@babel/preset-react', {runtime: 'automatic'}],
+    '@babel/preset-typescript',
+  ],
 };

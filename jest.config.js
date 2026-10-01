@@ -1,3 +1,5 @@
 module.exports = {
-  preset: '@react-native/jest-preset',
+  testEnvironment: 'jsdom',
+  setupFilesAfterEnv: ['@testing-library/jest-dom'],
+  testPathIgnorePatterns: ['/node_modules/', '/dist/'],
 };

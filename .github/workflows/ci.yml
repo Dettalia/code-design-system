@@ -5,7 +5,7 @@ on:
 
 jobs:
   ci:
-    name: Lint, test, and build Storybook
+    name: Typecheck, lint, test, and build Storybook
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -19,6 +19,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
 
       - name: Lint
         run: npm run lint

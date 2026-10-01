@@ -48,15 +48,22 @@ export const muiThemeFormat = {
     const variantFields = variants.map(v => `    ${v.name}: CSSProperties;`).join('\n');
     const variantOptionFields = variants.map(v => `    ${v.name}?: CSSProperties;`).join('\n');
     const variantPropOverrides = variants.map(v => `    ${v.name}: true;`).join('\n');
+    // If every text style shares one family, make it the base fontFamily too,
+    // so MUI's built-in variants (h1, body1, button, ...) match the custom ones.
+    const families = [...new Set(variants.map(v => v.style.fontFamily))];
+    const baseFontFamily =
+      families.length === 1
+        ? `    fontFamily: ${JSON.stringify(`"${families[0]}", sans-serif`)},\n`
+        : '';
     const typographyEntries = variants
       .map(v => `    ${v.name}: ${serialize(v.style, 2)},`)
       .join('\n');
 
     return `${fileHeader([
-      'This file maps Bliro design tokens onto an MUI theme so the web app and',
-      '@dettalia/design-system share one source of truth.',
+      'Maps Bliro design tokens onto MUI ThemeOptions. src/theme/theme.ts passes',
+      'these to createTheme() together with the hand-written component defaults.',
     ])}
-import { createTheme, type ThemeOptions } from '@mui/material/styles';
+import type { ThemeOptions } from '@mui/material/styles';
 import type { CSSProperties } from 'react';
 
 declare module '@mui/material/styles' {
@@ -69,15 +76,11 @@ ${variantOptionFields}
   }
 
   interface Theme {
-    tokens: {
-      colors: typeof colors;
-      spacing: typeof spacing;
-      radius: typeof radius;
-    };
+    tokens: BliroTokens;
   }
 
   interface ThemeOptions {
-    tokens?: Theme['tokens'];
+    tokens?: BliroTokens;
   }
 }
 
@@ -89,11 +92,15 @@ ${variantPropOverrides}
 
 // Raw token scales, for anything the palette/spacing/shape mappings below don't cover
 // (e.g. the full spacing/radius scale, or color groups with no MUI slot, like "neutral"/"dark").
-const colors = ${serialize(colors, 0)} as const;
-const spacing = ${serialize(spacing, 0)} as const;
-const radius = ${serialize(radius, 0)} as const;
+export const colors = ${serialize(colors, 0)} as const;
+export const spacing = ${serialize(spacing, 0)} as const;
+export const radius = ${serialize(radius, 0)} as const;
 
-const themeOptions: ThemeOptions = {
+export const tokens = { colors, spacing, radius } as const;
+
+export type BliroTokens = typeof tokens;
+
+export const themeOptions: ThemeOptions = {
   palette: {
     primary: {
       main: colors.button.primary.main,
@@ -129,18 +136,10 @@ const themeOptions: ThemeOptions = {
     borderRadius: radius.button,
   },
   typography: {
-${typographyEntries}
+${baseFontFamily}${typographyEntries}
   },
-  tokens: {
-    colors,
-    spacing,
-    radius,
-  },
+  tokens,
 };
-
-export const theme = createTheme(themeOptions);
-
-export default theme;
 `;
   },
 };
