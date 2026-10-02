@@ -51,8 +51,11 @@ export const palette = {
   },
 };
 
+// MUI's default corner radius, used by components without their own radius
+// token (Alert, Menu, Tooltip, ...) and by `borderRadius: 1` in `sx`. Buttons
+// use radius.button via src/theme/components/button.ts.
 export const shape = {
-  borderRadius: 'radius.button',
+  borderRadius: 'radius.sm',
 };
 
 // MUI typography variant -> Figma text style. Every Figma text style is also

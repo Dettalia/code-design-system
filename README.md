@@ -84,8 +84,15 @@ mapping, and how to review a sync PR.
 
 ## Storybook (browser preview)
 
-`.storybook/` uses `@storybook/react-vite` with the a11y addon. `.storybook/preview.tsx` wraps every
-story in the Bliro `ThemeProvider`, and stories live in `src/**/*.stories.tsx`.
+`.storybook/` uses `@storybook/react-vite` with the a11y addon. Stories live in `src/**/*.stories.tsx`:
+
+- **Tokens:** every Figma token with its alias chain, plus how `mui-mapping.mjs` applies them
+  (palette, typography variants, spacing, radius, shadows/elevation).
+- **Themed components:** a gallery of MUI components (buttons, inputs, feedback, data display,
+  navigation, surfaces). Each demo lists the token mappings and overrides that shape it.
+- **Playground:** Button and TextField with editable props (Controls panel).
+
+The **Theme** toolbar switch swaps between the Bliro theme and MUI's default, for comparison.
 
 ```bash
 npm run storybook

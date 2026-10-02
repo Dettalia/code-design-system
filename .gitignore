@@ -10,3 +10,5 @@ src/theme/tokens.ts
 
 # Paged Figma export, consumed and deleted by `npm run tokens:import`
 tokens/.figma-export/
+
+*storybook.log

@@ -10,7 +10,7 @@ describe('theme', () => {
     expect(theme.palette.success.main).toBe(tokens.color.success.default);
     expect(theme.palette.background.default).toBe(tokens.color.background.page);
     expect(theme.palette.divider).toBe(tokens.color.border.default);
-    expect(theme.shape.borderRadius).toBe(tokens.radius.button);
+    expect(theme.shape.borderRadius).toBe(tokens.radius.sm);
     expect(theme.tokens).toEqual(tokens);
   });
 

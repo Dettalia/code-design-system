@@ -1,20 +1,12 @@
 import {createTheme, type ThemeOptions} from '@mui/material/styles';
+import {MuiButton} from './components/button';
 import {themeOptions, tokens} from './tokens';
 
 // Bliro defaults for MUI components, on top of the token-derived palette,
 // shape, typography and shadows in `./tokens` (generated). Only token values
 // are used here; if a design needs a value with no token, raise it with design.
 const components: ThemeOptions['components'] = {
-  MuiButton: {
-    defaultProps: {
-      disableElevation: true,
-    },
-    styleOverrides: {
-      root: {
-        textTransform: 'none',
-      },
-    },
-  },
+  MuiButton,
   MuiCard: {
     styleOverrides: {
       root: {

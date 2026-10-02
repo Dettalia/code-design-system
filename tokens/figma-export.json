@@ -4,7 +4,7 @@
       "fileKey": "PNfRHPC6U3OTPIhKs9QMwv"
     },
     "exporter": "figma/export-tokens.js v1",
-    "checksum": "7edddb7a"
+    "checksum": "f4c32a67"
   },
   "color": {
     "orange": {
@@ -597,7 +597,7 @@
     },
     "button": {
       "$type": "dimension",
-      "$value": "{radius.sm}"
+      "$value": "{radius.lg}"
     },
     "input": {
       "$type": "dimension",

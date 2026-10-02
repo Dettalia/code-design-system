@@ -67,7 +67,9 @@ fills which MUI slot:
 - **typography:** `h1`–`h6`, `subtitle1/2`, `body1/2`, `button`, `caption` come from Figma text
   styles. Every Figma text style is _also_ its own variant, named after its path
   (`<Typography variant="bodySmallSemibold">`), and typed for consuming apps.
-- **shape:** `borderRadius` from `radius.button`.
+- **shape:** MUI's default `borderRadius` from `radius.sm`. Components with a semantic radius
+  token use it through overrides in `src/theme/`: buttons `radius.button`, cards `radius.card`,
+  inputs `radius.input`, chips `radius.tag`, dialogs `radius.modal`.
 - **shadows:** MUI elevations 1, 2 and 8 come from Figma shadows; elevations in between reuse the
   closest lower one.
 
@@ -84,7 +86,7 @@ values use `tokens.spacing`.
 - Read the **Removed** and **Changed** sections of the diff in the PR description. Removed tokens
   or renamed text styles are breaking for apps that use them.
 - Mapping changes in `mui-mapping.mjs` are design decisions. Get design sign-off on them.
-- Open Storybook (`Theme/Tokens`, `Theme/Shadows`, `MUI/Typography`) to check the result visually.
+- Open Storybook (`npm run storybook`) and check **Tokens** (every token, its alias, and its MUI slot) and **Themed components** (MUI components with the theme applied). The **Theme** toolbar switch compares against MUI's default theme.
 
 ## Not covered yet
 

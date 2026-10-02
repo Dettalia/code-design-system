@@ -11,4 +11,6 @@ export {
   themeOptions,
   tokens,
   type BliroTokens,
+  type BliroButtonVariant,
+  type BliroButtonSize,
 } from './theme';
