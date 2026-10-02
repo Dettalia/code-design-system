@@ -112,6 +112,9 @@ export const MuiButton: Components<Theme>['MuiButton'] = {
   styleOverrides: {
     root: ({theme}) => ({
       textTransform: 'none',
+      // Figma's label layer is whitespace-nowrap: labels never wrap, so every
+      // size keeps its exact height.
+      whiteSpace: 'nowrap',
       minWidth: 0,
       borderRadius: radius.button,
       boxShadow: 'none',

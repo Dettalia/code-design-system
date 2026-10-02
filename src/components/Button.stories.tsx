@@ -119,7 +119,7 @@ export const FigmaSheet: Story = {
           <Typography
             key={type.label + size.label}
             variant="bodyXxsmallRegular"
-            color="text.secondary"
+            color="textSecondary"
           >
             {size.label}px
           </Typography>

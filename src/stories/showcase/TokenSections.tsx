@@ -48,7 +48,7 @@ function Swatch({color, size = 32}: {color: string; size?: number}) {
 function AliasChain({token}: {token: ExportedToken}) {
   if (isPrimitive(token))
     return (
-      <Typography variant="bodyXsmallRegular" color="text.secondary">
+      <Typography variant="bodyXsmallRegular" color="textSecondary">
         primitive
       </Typography>
     );
@@ -56,7 +56,7 @@ function AliasChain({token}: {token: ExportedToken}) {
     <Stack direction="row" spacing={0.5} sx={{alignItems: 'center', flexWrap: 'wrap'}}>
       {token.aliases.map(alias => (
         <React.Fragment key={alias}>
-          <Typography variant="bodyXsmallRegular" color="text.secondary">
+          <Typography variant="bodyXsmallRegular" color="textSecondary">
             →
           </Typography>
           <TokenPath path={alias} />
@@ -110,7 +110,7 @@ export function ColorSection() {
                     <Typography variant="bodyXsmallMedium" sx={{display: 'block', mt: 0.5}}>
                       {shortName(token.path, `color.${group}`)}
                     </Typography>
-                    <Typography variant="bodyXxsmallRegular" color="text.secondary">
+                    <Typography variant="bodyXxsmallRegular" color="textSecondary">
                       {String(token.resolved)}
                     </Typography>
                   </Box>
@@ -141,7 +141,7 @@ export function ColorSection() {
                       sx={{alignItems: 'baseline', flexWrap: 'wrap'}}
                     >
                       <TokenPath path={token.path} />
-                      <Typography variant="bodyXxsmallRegular" color="text.secondary">
+                      <Typography variant="bodyXxsmallRegular" color="textSecondary">
                         {String(token.resolved)}
                       </Typography>
                     </Stack>
@@ -149,7 +149,7 @@ export function ColorSection() {
                     {token.description ? (
                       <Typography
                         variant="bodyXxsmallRegular"
-                        color="text.secondary"
+                        color="textSecondary"
                         sx={{display: 'block'}}
                       >
                         “{token.description}”
@@ -211,7 +211,7 @@ export function PaletteMappingSection({theme}: {theme: Theme}) {
                   <TableCell>
                     <Stack direction="row" spacing={1} sx={{alignItems: 'center'}}>
                       <Swatch color={fallback} size={24} />
-                      <Typography variant="bodyXsmallRegular" color="text.secondary">
+                      <Typography variant="bodyXsmallRegular" color="textSecondary">
                         {fallback}
                       </Typography>
                     </Stack>
@@ -277,7 +277,7 @@ export function TypographySection() {
                 <TokenPath path={path} />
                 <Typography
                   variant="bodyXxsmallRegular"
-                  color="text.secondary"
+                  color="textSecondary"
                   sx={{display: 'block'}}
                 >
                   {styleSpec(token.resolved as Record<string, unknown>)}
@@ -304,7 +304,7 @@ export function TypographySection() {
               <Typography variant="bodyXsmallSemibold" component="code">
                 {variantName(token.path)}
               </Typography>
-              <Typography variant="bodyXxsmallRegular" color="text.secondary">
+              <Typography variant="bodyXxsmallRegular" color="textSecondary">
                 {styleSpec(token.resolved as Record<string, unknown>)}
               </Typography>
             </Stack>
@@ -354,7 +354,7 @@ export function SpacingSection({theme}: {theme: Theme}) {
                 <AliasChain token={token} />
               </Box>
               <Box sx={{height: 12, width: value, bgcolor: 'primary.main', borderRadius: 0.5}} />
-              <Typography variant="bodyXsmallRegular" color="text.secondary">
+              <Typography variant="bodyXsmallRegular" color="textSecondary">
                 {value}px · theme.spacing({factor}) = {theme.spacing(factor)}
               </Typography>
             </Box>
@@ -394,7 +394,7 @@ export function RadiusBorderSection() {
               }}
             />
             <TokenPath path={token.path} />
-            <Typography variant="bodyXxsmallRegular" color="text.secondary" sx={{display: 'block'}}>
+            <Typography variant="bodyXxsmallRegular" color="textSecondary" sx={{display: 'block'}}>
               {String(token.resolved)}
             </Typography>
             <AliasChain token={token} />
@@ -413,7 +413,7 @@ export function RadiusBorderSection() {
               }}
             />
             <TokenPath path={token.path} />
-            <Typography variant="bodyXxsmallRegular" color="text.secondary" sx={{display: 'block'}}>
+            <Typography variant="bodyXxsmallRegular" color="textSecondary" sx={{display: 'block'}}>
               {String(token.resolved)}
             </Typography>
           </Box>
@@ -463,7 +463,7 @@ export function ShadowSection({theme}: {theme: Theme}) {
             <TokenPath path={token.path} />
             <Typography
               variant="bodyXxsmallRegular"
-              color="text.secondary"
+              color="textSecondary"
               sx={{display: 'block', mt: 1}}
             >
               {(token.resolved as {offsetY: string; blur: string; color: string}[])

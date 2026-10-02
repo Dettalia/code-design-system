@@ -18,7 +18,7 @@ export function Section({
         {title}
       </Typography>
       {description ? (
-        <Typography variant="body2" color="text.secondary" sx={{mt: 0.5, mb: 2.5, maxWidth: 820}}>
+        <Typography variant="body2" color="textSecondary" sx={{mt: 0.5, mb: 2.5, maxWidth: 820}}>
           {description}
         </Typography>
       ) : null}
@@ -79,7 +79,7 @@ export function Row({label, children}: {label?: string; children: React.ReactNod
   return (
     <Box sx={{mb: 2}}>
       {label ? (
-        <Typography variant="caption" color="text.secondary" sx={{display: 'block', mb: 1}}>
+        <Typography variant="caption" color="textSecondary" sx={{display: 'block', mb: 1}}>
           {label}
         </Typography>
       ) : null}

@@ -1,5 +1,12 @@
 import {createTheme, type ThemeOptions} from '@mui/material/styles';
 import {MuiButton} from './components/button';
+import {
+  MuiDialog,
+  MuiDialogActions,
+  MuiDialogContent,
+  MuiDialogContentText,
+  MuiDialogTitle,
+} from './components/dialog';
 import {themeOptions, tokens} from './tokens';
 
 // Bliro defaults for MUI components, on top of the token-derived palette,
@@ -10,7 +17,11 @@ const components: ThemeOptions['components'] = {
   MuiCard: {
     styleOverrides: {
       root: {
-        borderRadius: tokens.radius.card,
+        // Deliberately differs from Figma: the radius/card token is radius/lg
+        // (8px), but cards use radius.2xl (16px) in code. Code-only decision
+        // (2026-10-02). Once Figma's radius/card is updated, switch back to
+        // tokens.radius.card.
+        borderRadius: tokens.radius['2xl'],
       },
     },
   },
@@ -38,13 +49,11 @@ const components: ThemeOptions['components'] = {
       },
     },
   },
-  MuiDialog: {
-    styleOverrides: {
-      paper: {
-        borderRadius: tokens.radius.modal,
-      },
-    },
-  },
+  MuiDialog,
+  MuiDialogTitle,
+  MuiDialogContent,
+  MuiDialogContentText,
+  MuiDialogActions,
 };
 
 export const theme = createTheme({...themeOptions, components});

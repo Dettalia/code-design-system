@@ -12,3 +12,6 @@ src/theme/tokens.ts
 tokens/.figma-export/
 
 *storybook.log
+
+# Built by `npm run example:card`
+examples/dist/

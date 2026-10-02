@@ -55,6 +55,9 @@ npm run format
 npm test                  # jest + Testing Library (jsdom)
 npm run storybook         # browser preview at http://localhost:6006
 npm run build-storybook   # static Storybook build
+npm run example:card      # build examples/dist/card/index.html, a standalone page using the package
+npm run example:meetings  # build examples/dist/meetings/index.html (Figma "My meetings" page)
+npm run example:companies # build examples/dist/companies/index.html (Figma "Companies" page)
 npm run changeset         # record a change for the next release
 ```
 

@@ -4,3 +4,4 @@ storybook-static
 src/theme/tokens.ts
 tokens/figma-export.json
 tokens/.figma-export
+examples/dist

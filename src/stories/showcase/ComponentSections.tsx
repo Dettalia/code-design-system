@@ -24,7 +24,6 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
   Divider,
   Fab,
   FormControl,
@@ -69,6 +68,7 @@ import {
   Typography,
   type SvgIconProps,
 } from '../../index';
+import {ModalHeader} from '../../examples/ModalParts';
 import {Demo, Row, Section} from './ui';
 
 // Small inline icons, so the viewer doesn't need @mui/icons-material.
@@ -332,7 +332,10 @@ export function FeedbackSection() {
       </Demo>
       <Demo
         title="Progress, Skeleton, Dialog, Snackbar, Tooltip"
-        inputs={['shadows[24] ← shadow.modal (Dialog)', 'override: Dialog radius.modal']}
+        inputs={[
+          'Dialog = Figma Modal: shadow.modal, radius.2xl, 480px',
+          'DialogTitle padding 16 + divider, DialogContent 24, DialogActions 16',
+        ]}
       >
         <Row>
           <CircularProgress />
@@ -361,15 +364,21 @@ export function FeedbackSection() {
             <Button>Hover for tooltip</Button>
           </Tooltip>
         </Row>
-        <Dialog open={dialog} onClose={() => setDialog(false)}>
-          <DialogTitle>Share meeting summary?</DialogTitle>
+        <Dialog open={dialog} onClose={() => setDialog(false)} aria-labelledby="showcase-dialog">
+          <ModalHeader
+            id="showcase-dialog"
+            title="Share meeting summary?"
+            onClose={() => setDialog(false)}
+          />
           <DialogContent>
             <DialogContentText>
               The summary and action items will be sent to all 4 attendees.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setDialog(false)}>Cancel</Button>
+            <Button variant="outlined" onClick={() => setDialog(false)}>
+              Cancel
+            </Button>
             <Button variant="contained" onClick={() => setDialog(false)}>
               Share
             </Button>
@@ -522,7 +531,7 @@ export function NavigationSection() {
             <Link underline="hover" color="inherit" href="#navigation">
               Acme Corp
             </Link>
-            <Typography color="text.primary">Discovery call</Typography>
+            <Typography color="textPrimary">Discovery call</Typography>
           </Breadcrumbs>
         </Row>
         <Row>
@@ -566,7 +575,7 @@ export function SurfacesSection() {
       <Demo
         title="Card, Paper, Accordion, AppBar"
         inputs={[
-          'override: Card radius.card',
+          'override: Card radius.2xl (16px, code only; Figma radius.card is 8px)',
           'Paper outlined border ← color.border.default',
           'background.paper ← color.background.surface',
           'shadows[1] ← shadow.1',
@@ -582,11 +591,11 @@ export function SurfacesSection() {
         >
           <Card>
             <CardContent>
-              <Typography variant="overline" color="text.secondary">
+              <Typography variant="overline" color="textSecondary">
                 Elevated card
               </Typography>
               <Typography variant="h6">Discovery call — Acme</Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" color="textSecondary">
                 Budget confirmed for Q4. Next step: technical demo with IT.
               </Typography>
             </CardContent>
@@ -599,18 +608,18 @@ export function SurfacesSection() {
           </Card>
           <Card variant="outlined">
             <CardContent>
-              <Typography variant="overline" color="text.secondary">
+              <Typography variant="overline" color="textSecondary">
                 Outlined card
               </Typography>
               <Typography variant="h6">Weekly sync</Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" color="textSecondary">
                 3 action items, 2 decisions.
               </Typography>
             </CardContent>
           </Card>
           <Paper sx={{p: 2, bgcolor: 'background.default'}} elevation={0}>
             <Typography variant="subtitle1">background.default</Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" color="textSecondary">
               ← color.background.page. This is the page background CssBaseline applies.
             </Typography>
           </Paper>

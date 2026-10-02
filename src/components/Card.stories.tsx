@@ -4,7 +4,7 @@ import {Button, Card, CardActions, CardContent, Typography} from '../index';
 const content = (
   <CardContent>
     <Typography variant="h6">Discovery call — Acme</Typography>
-    <Typography variant="body2" color="text.secondary">
+    <Typography variant="body2" color="textSecondary">
       Budget confirmed for Q4. Next step: technical demo with IT.
     </Typography>
   </CardContent>

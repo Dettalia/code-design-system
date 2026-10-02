@@ -68,8 +68,13 @@ fills which MUI slot:
   styles. Every Figma text style is _also_ its own variant, named after its path
   (`<Typography variant="bodySmallSemibold">`), and typed for consuming apps.
 - **shape:** MUI's default `borderRadius` from `radius.sm`. Components with a semantic radius
-  token use it through overrides in `src/theme/`: buttons `radius.button`, cards `radius.card`,
-  inputs `radius.input`, chips `radius.tag`, dialogs `radius.modal`.
+  token use it through overrides in `src/theme/`: buttons `radius.button`, inputs `radius.input`,
+  chips `radius.tag`. **Exceptions:** cards use `radius.2xl` (16px), not Figma's `radius.card`
+  (8px). That's a code-only decision; switch back to `radius.card` once Figma is updated. Dialogs
+  use `radius.2xl` (16px) because the Figma Modal component does, even though a `radius.modal`
+  token (12px) exists.
+- **Dialogs** follow the Figma Modal component (`src/theme/components/dialog.ts`): `DialogTitle`
+  is the header with its divider, `DialogContent` the content slot, `DialogActions` the footer.
 - **shadows:** MUI elevations 1, 2 and 8 come from Figma shadows; elevations in between reuse the
   closest lower one.
 
