@@ -31,3 +31,19 @@ jobs:
 
       - name: Build Storybook
         run: npm run build-storybook
+
+      # Standalone HTML pages (examples/), attached to the run so people
+      # without a dev setup can review them: download "example-pages" from the
+      # run's Artifacts section, unzip, and open <page>/index.html.
+      - name: Build example pages
+        run: |
+          npm run example:card
+          npm run example:meetings
+          npm run example:companies
+
+      - name: Upload example pages
+        uses: actions/upload-artifact@v7
+        with:
+          name: example-pages
+          path: examples/dist
+          retention-days: 30

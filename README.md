@@ -15,7 +15,8 @@ import {Button, TextField, ThemeProvider, Typography} from '@dettalia/design-sys
 export function App() {
   return (
     <ThemeProvider>
-      <Typography variant="subheadingSubheading2">Hello</Typography>
+      <Typography variant="h1">Hello</Typography>
+      <Typography variant="bodySmallSemibold">Any Figma text style works as a variant</Typography>
       <TextField label="Name" />
       <Button variant="contained">Save</Button>
     </ThemeProvider>
@@ -31,8 +32,9 @@ export function App() {
   applies the Bliro `theme` by default, and renders MUI's `CssBaseline` (turn this off with
   `cssBaseline={false}`). Pass `theme={...}` to use a different theme.
 - **`theme`** is the ready-made Bliro MUI theme, **`themeOptions`** is the token-derived input to
-  `createTheme()` (useful for extending it), and **`tokens`** holds the raw color, spacing and
-  radius scales. The same scales are available at runtime as `useTheme().tokens`.
+  `createTheme()` (useful for extending it), and **`tokens`** holds every Figma token (color,
+  spacing, radius, border, font, shadow). The same values are available at runtime as
+  `useTheme().tokens`.
 - `@mui/material`, `@emotion/react`, `@emotion/styled`, `react` and `react-dom` are **peer
   dependencies**, so your app controls their versions.
 - **Web only.** MUI renders to the DOM, so this package no longer supports React Native.
@@ -41,8 +43,10 @@ export function App() {
 
 ```bash
 npm install
-npm run tokens:build      # regenerate src/theme/tokens.ts from Figma tokens (runs automatically
-                          # before build, test, typecheck and storybook)
+npm run tokens:build      # regenerate src/theme/tokens.ts from tokens/figma-export.json (runs
+                          # automatically before build, test, typecheck and storybook)
+npm run tokens:import     # reassemble a paged Figma export (used by /sync-figma-tokens)
+npm run tokens:diff       # Markdown summary of token changes vs HEAD
 npm run build             # tokens:build -> tsup -> dist (ESM + CJS + .d.ts)
 npm run dev               # tsup --watch
 npm run typecheck
@@ -51,6 +55,9 @@ npm run format
 npm test                  # jest + Testing Library (jsdom)
 npm run storybook         # browser preview at http://localhost:6006
 npm run build-storybook   # static Storybook build
+npm run example:card      # build examples/dist/card/index.html, a standalone page using the package
+npm run example:meetings  # build examples/dist/meetings/index.html (Figma "My meetings" page)
+npm run example:companies # build examples/dist/companies/index.html (Figma "Companies" page)
 npm run changeset         # record a change for the next release
 ```
 
@@ -59,6 +66,7 @@ npm run changeset         # record a change for the next release
 - `src/index.ts`: package entry. Re-exports `@mui/material` plus the Bliro theme.
 - `src/theme/tokens.ts`: **generated** from Figma (see below). Holds `tokens`, `themeOptions`
   and the MUI module augmentation.
+- `figma/`: the Figma export script and source file reference. `scripts/`: token import/diff.
 - `src/theme/theme.ts`: hand-written Bliro defaults for MUI components (`components` overrides),
   combined with `themeOptions` into `theme`.
 - `src/theme/ThemeProvider.tsx`: the Bliro `ThemeProvider`.
@@ -66,35 +74,33 @@ npm run changeset         # record a change for the next release
 
 ## Design tokens
 
-`tokens/figma-export.json`, exported from Figma, is the single source of truth for tokens.
-[Style Dictionary](https://styledictionary.com) reads it (`style-dictionary/sd.config.mjs`) and
-uses the custom format in `style-dictionary/formats/mui-theme.mjs` to generate
-`src/theme/tokens.ts`, which contains:
+Tokens come from the Bliro Design System Figma file, which is the source of truth. To pull in
+changes, run **`/sync-figma-tokens`** in Claude Code; it exports, rebuilds, verifies and opens a
+PR. [docs/design-tokens.md](docs/design-tokens.md) covers the whole pipeline, the token → MUI
+mapping, and how to review a sync PR.
 
-- `themeOptions`: tokens mapped onto MUI's `palette`, `shape` and `typography`. Each Figma text
-  style becomes a custom Typography variant, such as `<Typography variant="bodySmallSemibold">`.
-- `tokens`: the raw `colors` / `spacing` / `radius` scales, also attached to the theme as
-  `theme.tokens`.
-- `declare module '@mui/material/styles'` augmentation, so the custom variants and
-  `theme.tokens` are type-checked in consuming apps.
-
-The file is generated, not edited by hand, and is gitignored. Run `npm run tokens:build` after
-changing `tokens/figma-export.json`.
-
-Notes baked into the generated file:
-
-- `letterSpacing` is passed through exactly as Figma exported it. The source `_meta.note` says its
-  unit (px or %) hasn't been confirmed, so check before relying on it for layout-critical text.
-- The custom typography variant names (e.g. `bodySmallSemibold`) are derived mechanically from the
-  token path rather than chosen as semantic names. Rename them once real variant names are assigned
-  upstream.
-- Some color tokens (`warning.text`/`warning.subtle`, `border.disabled`) have no unambiguous slot
-  in MUI's palette API, so they are left out of `palette`. Use `theme.tokens.colors` for those.
+- `tokens/figma-export.json`: the committed export. Never edit it by hand; the build checks its
+  checksum.
+- `style-dictionary/mui-mapping.mjs`: which token fills which MUI palette, typography, shape and
+  shadow slot.
+- `src/theme/tokens.ts`: generated by `npm run tokens:build` (gitignored).
 
 ## Storybook (browser preview)
 
-`.storybook/` uses `@storybook/react-vite` with the a11y addon. `.storybook/preview.tsx` wraps every
-story in the Bliro `ThemeProvider`, and stories live in `src/**/*.stories.tsx`.
+`.storybook/` uses `@storybook/react-vite` with the a11y addon. Stories live in `src/**/*.stories.tsx`:
+
+- **Tokens:** every Figma token with its alias chain, plus how `mui-mapping.mjs` applies them
+  (palette, typography variants, spacing, radius, shadows/elevation).
+- **Themed components:** a gallery of MUI components (buttons, inputs, feedback, data display,
+  navigation, surfaces). Each demo lists the token mappings and overrides that shape it.
+- **Playground:** Button and TextField with editable props (Controls panel).
+
+The **Theme** toolbar switch swaps between the Bliro theme and MUI's default, for comparison.
+
+Stories render on the white surface color (`color.background.surface`), like components on Figma
+frames, not on the theme's page background (`color.background.page`, `#f7f7f7`). The Outlined,
+Text and Text-Subtle button hover tokens are the same `#f7f7f7`, so on the page background their
+hover is invisible. That's an open design question, not a Storybook bug.
 
 ```bash
 npm run storybook

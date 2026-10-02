@@ -34,27 +34,18 @@ npm test
 npm run build-storybook   # catches build errors; open npm run storybook to eyeball it
 ```
 
-## Regenerating theme tokens after a Figma change
+## Syncing design tokens from Figma
 
-`tokens/figma-export.json` is the single source of truth for design tokens — replace it with a fresh
-export from Figma, then regenerate the generated theme file:
+Run **`/sync-figma-tokens`** in Claude Code. See [docs/design-tokens.md](docs/design-tokens.md)
+for the full process. In short:
 
-```bash
-npm run tokens:build
-```
-
-This runs [Style Dictionary](https://styledictionary.com) (config: `style-dictionary/sd.config.mjs`)
-and rewrites `src/theme/tokens.ts` (MUI `themeOptions`, the raw `tokens`, and the MUI type
-augmentation).
-
-It is **generated and gitignored** — never hand-edit them; changes belong in
-`tokens/figma-export.json` or, if the _shape_ of the output needs to change (not just values), in the
-format functions under `style-dictionary/formats/`. `build`, `test`, `typecheck`, `storybook` and
-`build-storybook` all run `tokens:build` first, so they always use the latest tokens.
-
-If the new export adds/renames/removes tokens in a way that changes what a component can express
-(e.g. a new color role, a new type scale step), update the component defaults in `src/theme/theme.ts` to use it and add a
-changeset (see below) — token changes that affect the public API are worth a release note.
+- Change token **values** in Figma, never in `tokens/figma-export.json`. The build rejects hand
+  edits.
+- Change **which token feeds which MUI slot** in `style-dictionary/mui-mapping.mjs`. That's a
+  design decision, so get design sign-off.
+- Change the **shape of the generated code** in `style-dictionary/formats/mui-theme.mjs`.
+- `src/theme/tokens.ts` is generated and gitignored. `build`, `test`, `typecheck`, `storybook` and
+  `build-storybook` all run `tokens:build` first.
 
 ## How a release gets published
 

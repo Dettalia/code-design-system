@@ -2,3 +2,6 @@ dist
 node_modules
 storybook-static
 src/theme/tokens.ts
+tokens/figma-export.json
+tokens/.figma-export
+examples/dist

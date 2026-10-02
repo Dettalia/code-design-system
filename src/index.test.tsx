@@ -3,11 +3,34 @@ import userEvent from '@testing-library/user-event';
 import {Button, Typography, ThemeProvider, theme, tokens, useTheme} from './index';
 
 describe('theme', () => {
-  it('maps tokens onto the MUI palette and shape', () => {
-    expect(theme.palette.primary.main).toBe(tokens.colors.button.primary.main);
-    expect(theme.palette.error.main).toBe(tokens.colors.error.default);
-    expect(theme.shape.borderRadius).toBe(tokens.radius.button);
+  it('maps Figma tokens onto the MUI palette', () => {
+    expect(theme.palette.primary.main).toBe(tokens.color.button.primary.main);
+    expect(theme.palette.primary.dark).toBe(tokens.color.button.primary.hovered);
+    expect(theme.palette.error.main).toBe(tokens.color.error.default);
+    expect(theme.palette.success.main).toBe(tokens.color.success.default);
+    expect(theme.palette.background.default).toBe(tokens.color.background.page);
+    expect(theme.palette.divider).toBe(tokens.color.border.default);
+    expect(theme.shape.borderRadius).toBe(tokens.radius.sm);
     expect(theme.tokens).toEqual(tokens);
+  });
+
+  it('maps Figma text styles onto MUI typography variants', () => {
+    // Heading/H1: Inter Bold 48/64, letter spacing -2% in Figma.
+    expect(theme.typography.h1).toMatchObject({
+      fontWeight: 700,
+      fontSize: '3rem',
+      lineHeight: 1.3333,
+      letterSpacing: '-0.02em',
+    });
+    expect(theme.typography.body1).toMatchObject(theme.typography.bodyNormalRegular);
+    expect(theme.typography.fontFamily).toBe('"Inter", sans-serif');
+  });
+
+  it('maps Figma shadows onto MUI elevations', () => {
+    expect(theme.shadows[0]).toBe('none');
+    expect(theme.shadows[1]).toBe(tokens.shadow['1']);
+    expect(theme.shadows[4]).toBe(tokens.shadow['2']);
+    expect(theme.shadows[24]).toBe(tokens.shadow.modal);
   });
 
   it('is applied by the Bliro ThemeProvider by default', () => {
@@ -19,7 +42,7 @@ describe('theme', () => {
         <Probe />
       </ThemeProvider>,
     );
-    expect(screen.getByText(tokens.colors.button.primary.main)).toBeInTheDocument();
+    expect(screen.getByText(tokens.color.button.primary.main)).toBeInTheDocument();
   });
 });
 
