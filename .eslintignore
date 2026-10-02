@@ -1,5 +1,0 @@
-dist
-node_modules
-storybook-static
-src/theme/tokens.ts
-web/mui-theme.ts

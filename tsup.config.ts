@@ -8,5 +8,5 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   splitting: false,
-  external: ['react', 'react-native'],
+  external: ['react', 'react-dom', /^@mui\//, /^@emotion\//],
 });
