@@ -1,6 +1,6 @@
 {
   "name": "@dettalia/design-system",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Bliro design system for React web apps: MUI components with the Bliro theme generated from Figma tokens.",
   "license": "UNLICENSED",
   "repository": {
