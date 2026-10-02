@@ -1,7 +1,7 @@
 import React from 'react';
 import type {Preview} from '@storybook/react-vite';
 import {createTheme} from '@mui/material/styles';
-import {ThemeProvider, theme as bliroTheme} from '../src';
+import {GlobalStyles, ThemeProvider, theme as bliroTheme} from '../src';
 
 const themes = {
   bliro: bliroTheme,
@@ -30,6 +30,12 @@ const preview: Preview = {
   decorators: [
     (Story, context) => (
       <ThemeProvider theme={themes[context.globals.theme as keyof typeof themes] ?? bliroTheme}>
+        {/* Stories sit on the white surface color, like components on Figma frames.
+            The theme's page background (color.background.page, #f7f7f7) equals the
+            Outlined/Text button hover token, which would make that hover invisible. */}
+        <GlobalStyles
+          styles={theme => ({body: {backgroundColor: theme.palette.background.paper}})}
+        />
         <Story />
       </ThemeProvider>
     ),

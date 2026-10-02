@@ -94,6 +94,11 @@ mapping, and how to review a sync PR.
 
 The **Theme** toolbar switch swaps between the Bliro theme and MUI's default, for comparison.
 
+Stories render on the white surface color (`color.background.surface`), like components on Figma
+frames, not on the theme's page background (`color.background.page`, `#f7f7f7`). The Outlined,
+Text and Text-Subtle button hover tokens are the same `#f7f7f7`, so on the page background their
+hover is invisible. That's an open design question, not a Storybook bug.
+
 ```bash
 npm run storybook
 ```
