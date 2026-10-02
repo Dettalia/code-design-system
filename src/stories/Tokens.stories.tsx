@@ -22,7 +22,7 @@ function flatten(tree: ColorTree, prefix: string[] = []): [string, string][] {
 export const Colors: Story = {
   render: () => (
     <Stack spacing={1}>
-      {flatten(tokens.colors).map(([name, value]) => (
+      {flatten(tokens.color).map(([name, value]) => (
         <Stack key={name} direction="row" spacing={2} sx={{alignItems: 'center'}}>
           <Box
             sx={{

@@ -13,4 +13,13 @@ export default tseslint.config(
       globals: {...globals.browser, ...globals.node, ...globals.jest},
     },
   },
+  {
+    // Runs inside Figma as a plugin script body (see the file's header).
+    files: ['figma/export-tokens.js'],
+    languageOptions: {
+      sourceType: 'script',
+      parserOptions: {ecmaFeatures: {globalReturn: true}},
+      globals: {figma: 'readonly', PAGE: 'readonly'},
+    },
+  },
 );

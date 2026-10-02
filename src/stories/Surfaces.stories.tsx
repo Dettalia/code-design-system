@@ -15,7 +15,7 @@ export const CardElevated: Story = {
       <CardContent>
         <Typography variant="subheadingSubheading2">Card title</Typography>
         <Typography variant="bodySmallRegular" color="text.secondary">
-          Cards use the 2xl radius token.
+          Cards use the radius.card token.
         </Typography>
       </CardContent>
       <CardActions>

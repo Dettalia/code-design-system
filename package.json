@@ -27,6 +27,8 @@
   "sideEffects": false,
   "scripts": {
     "tokens:build": "style-dictionary build --config style-dictionary/sd.config.mjs",
+    "tokens:import": "node scripts/tokens-import.mjs",
+    "tokens:diff": "node scripts/tokens-diff.mjs",
     "build": "npm run tokens:build && tsup",
     "dev": "tsup --watch",
     "pretypecheck": "npm run tokens:build",

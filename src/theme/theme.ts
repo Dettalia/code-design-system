@@ -2,38 +2,54 @@ import {createTheme, type ThemeOptions} from '@mui/material/styles';
 import {themeOptions, tokens} from './tokens';
 
 // Bliro defaults for MUI components, on top of the token-derived palette,
-// shape, and typography in `./tokens` (generated). Only token values are used
-// here — if a design needs a value with no token, raise it with design first.
+// shape, typography and shadows in `./tokens` (generated). Only token values
+// are used here; if a design needs a value with no token, raise it with design.
 const components: ThemeOptions['components'] = {
   MuiButton: {
     defaultProps: {
       disableElevation: true,
     },
     styleOverrides: {
-      root: ({theme}) => ({
-        ...theme.typography.bodySmallSemibold,
+      root: {
         textTransform: 'none',
-      }),
+      },
     },
   },
   MuiCard: {
     styleOverrides: {
       root: {
-        borderRadius: tokens.radius['2xl'],
+        borderRadius: tokens.radius.card,
       },
     },
   },
   MuiPaper: {
     styleOverrides: {
       outlined: {
-        borderColor: tokens.colors.border.disabled,
+        borderColor: tokens.color.border.default,
       },
     },
   },
   MuiOutlinedInput: {
     styleOverrides: {
+      root: {
+        borderRadius: tokens.radius.input,
+      },
       notchedOutline: {
-        borderColor: tokens.colors.border.disabled,
+        borderColor: tokens.color.border.default,
+      },
+    },
+  },
+  MuiChip: {
+    styleOverrides: {
+      root: {
+        borderRadius: tokens.radius.tag,
+      },
+    },
+  },
+  MuiDialog: {
+    styleOverrides: {
+      paper: {
+        borderRadius: tokens.radius.modal,
       },
     },
   },
