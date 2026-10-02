@@ -354,6 +354,10 @@ export interface FlowShellProps {
 
 const SIDEBAR_WIDTH = 240;
 
+// App background behind the sidebar and panel. #fafafa (changed on request,
+// 2026-10-02; Figma uses #fffbfa). Neither is a design-system token.
+const APP_BACKGROUND = '#fafafa';
+
 export function FlowShell({route, onNavigate, panelTop = 24, children}: FlowShellProps) {
   const inSettings = route.startsWith('settings/');
   const desktop = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'), {noSsr: true});
@@ -388,8 +392,7 @@ export function FlowShell({route, onNavigate, panelTop = 24, children}: FlowShel
   );
 
   return (
-    // Figma's app background #fffbfa has no design-system token.
-    <Box sx={{height: '100vh', display: 'flex', bgcolor: '#fffbfa'}}>
+    <Box sx={{height: '100vh', display: 'flex', bgcolor: APP_BACKGROUND}}>
       {desktop ? (
         <Box sx={{flexShrink: 0}}>{sidebar}</Box>
       ) : (
@@ -397,7 +400,7 @@ export function FlowShell({route, onNavigate, panelTop = 24, children}: FlowShel
         <Drawer
           open={drawerOpen}
           onClose={() => setDrawerOpen(false)}
-          slotProps={{paper: {sx: {bgcolor: '#fffbfa'}}}}
+          slotProps={{paper: {sx: {bgcolor: APP_BACKGROUND}}}}
         >
           {sidebar}
         </Drawer>

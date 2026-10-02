@@ -12,7 +12,15 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Meetings: Story = {};
+export const Meetings: Story = {
+  play: async ({canvas}) => {
+    // App background behind the sidebar and the white panel: #fafafa.
+    const panel = canvas.getByRole('main');
+    const app = panel.parentElement!.parentElement!;
+    await expect(getComputedStyle(app).backgroundColor).toBe('rgb(250, 250, 250)');
+    await expect(getComputedStyle(panel).backgroundColor).toBe('rgb(255, 255, 255)');
+  },
+};
 
 export const Companies: Story = {args: {initialRoute: 'companies'}};
 
