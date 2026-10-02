@@ -1,0 +1,77 @@
+name: Deploy to GitHub Pages
+
+# Publishes https://dettalia.github.io/code-design-system/ on every push to
+# main (and, until the open PRs merge, to figma-token-sync):
+#   /              start page (examples/site/index.html)
+#   /companies/    example pages built by examples/build.mjs
+#   /meetings/
+#   /card/
+#   /storybook/    static Storybook
+
+on:
+  push:
+    branches: [main, figma-token-sync]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time; a newer push replaces a queued one.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Storybook
+        run: npm run build-storybook
+
+      - name: Build example pages
+        run: |
+          npm run example:card
+          npm run example:meetings
+          npm run example:companies
+
+      - name: Assemble site
+        run: |
+          mkdir -p _site
+          cp examples/site/index.html _site/
+          cp -R examples/dist/. _site/
+          cp -R storybook-static _site/storybook
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v6
+
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

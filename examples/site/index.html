@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bliro design system</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Values are the Bliro tokens (see tokens/figma-export.json). */
+      :root {
+        --text-primary: #131a26;
+        --text-secondary: #71767d;
+        --border: #e7e8e9;
+        --page: #f7f7f7;
+        --surface: #ffffff;
+        --brand: #f26835;
+        --brand-subtle: #fef0ea;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--page);
+        color: var(--text-primary);
+        font-family: 'Inter', system-ui, sans-serif;
+        letter-spacing: -0.01em;
+      }
+      main {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 48px 16px;
+      }
+      h1 {
+        font-size: 24px;
+        line-height: 36px;
+        font-weight: 600;
+        margin: 0 0 4px;
+      }
+      p.lead {
+        margin: 0 0 32px;
+        color: var(--text-secondary);
+        font-size: 14px;
+        line-height: 22px;
+      }
+      h2 {
+        font-size: 14px;
+        line-height: 22px;
+        font-weight: 500;
+        color: var(--text-secondary);
+        margin: 32px 0 8px;
+      }
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 4px;
+      }
+      a.item {
+        display: block;
+        padding: 16px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        color: inherit;
+        text-decoration: none;
+      }
+      a.item:hover {
+        border-color: var(--brand);
+      }
+      a.item:focus-visible {
+        outline: 2px solid rgba(242, 104, 53, 0.3);
+        outline-offset: 2px;
+      }
+      .title {
+        font-size: 14px;
+        line-height: 24px;
+        font-weight: 600;
+      }
+      .desc {
+        font-size: 13px;
+        line-height: 20px;
+        color: var(--text-secondary);
+      }
+      .tag {
+        display: inline-block;
+        margin-left: 8px;
+        padding: 0 6px;
+        border-radius: 4px;
+        background: var(--brand-subtle);
+        color: var(--brand);
+        font-size: 11px;
+        line-height: 16px;
+        font-weight: 500;
+        vertical-align: 2px;
+      }
+      footer {
+        margin-top: 40px;
+        font-size: 13px;
+        color: var(--text-secondary);
+      }
+      footer a {
+        color: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Bliro design system</h1>
+      <p class="lead">
+        MUI components themed with Bliro's Figma tokens. Pages and Storybook are rebuilt from the
+        repository on every push.
+      </p>
+
+      <h2>Example pages</h2>
+      <ul>
+        <li>
+          <a class="item" href="companies/">
+            <span class="title">Companies</span><span class="tag">Prototype</span>
+            <div class="desc">
+              Figma Companies list with search, sorting, clickable rows and Add company.
+            </div>
+          </a>
+        </li>
+        <li>
+          <a class="item" href="meetings/">
+            <span class="title">My meetings</span>
+            <div class="desc">The Bliro Web app "My meetings" screen, rebuilt from Figma.</div>
+          </a>
+        </li>
+        <li>
+          <a class="item" href="card/">
+            <span class="title">Card with modal</span>
+            <div class="desc">A card whose main button opens the Figma Modal.</div>
+          </a>
+        </li>
+      </ul>
+
+      <h2>Components</h2>
+      <ul>
+        <li>
+          <a class="item" href="storybook/">
+            <span class="title">Storybook</span>
+            <div class="desc">
+              Every component, the tokens, and the Figma component sheets (Button, Dialog).
+            </div>
+          </a>
+        </li>
+      </ul>
+
+      <footer>
+        Source:
+        <a href="https://github.com/Dettalia/code-design-system">Dettalia/code-design-system</a>
+      </footer>
+    </main>
+  </body>
+</html>

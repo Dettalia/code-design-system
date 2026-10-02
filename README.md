@@ -3,6 +3,10 @@
 Bliro's design system for React web apps: the full [MUI](https://mui.com/material-ui/) component
 library, themed with Bliro's Figma design tokens.
 
+**Live site:** https://dettalia.github.io/code-design-system/: Storybook and the example pages
+(Companies, My meetings, card with modal), rebuilt by
+[.github/workflows/pages.yml](.github/workflows/pages.yml) on every push to `main`.
+
 ## Usage
 
 ```bash
