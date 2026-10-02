@@ -256,9 +256,10 @@ const FILTERS = ['Date', 'Send Status', 'Contact', 'Record'];
 
 // --- Page ----------------------------------------------------------------------
 
-export function MeetingsPage({links}: {links?: AppShellProps['links']} = {}) {
+/** The "My meetings" page content, without the app shell (used by the flow prototype). */
+export function MeetingsContent() {
   return (
-    <AppShell selected="My meetings" links={links}>
+    <>
       <Box
         sx={{
           width: '100%',
@@ -287,6 +288,14 @@ export function MeetingsPage({links}: {links?: AppShellProps['links']} = {}) {
       </Box>
       <MeetingSection title="Upcoming meetings" meetings={UPCOMING} upcoming />
       <MeetingSection title="Previous meetings" meetings={PREVIOUS} />
+    </>
+  );
+}
+
+export function MeetingsPage({links}: {links?: AppShellProps['links']} = {}) {
+  return (
+    <AppShell selected="My meetings" links={links}>
+      <MeetingsContent />
     </AppShell>
   );
 }

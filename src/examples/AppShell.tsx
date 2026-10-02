@@ -46,7 +46,7 @@ export const Img = ({src, alt = ''}: {src: string; alt?: string}) => (
 
 // --- Top bar -----------------------------------------------------------------
 
-function BliroLogo() {
+export function BliroLogo() {
   // Figma lays the two logo parts out inside an 85.94 x 24 frame by percentage.
   return (
     <Box
@@ -160,7 +160,7 @@ function TopNav() {
 // --- Sidebar -----------------------------------------------------------------
 
 /** Figma "Vicky" avatar: the photo cropped into a gradient circle, as in Figma. */
-function VickyAvatar() {
+export function VickyAvatar() {
   return (
     <Box
       sx={{

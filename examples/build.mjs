@@ -9,6 +9,7 @@ const PAGES = {
   card: 'Bliro card example',
   meetings: 'My meetings · Bliro',
   companies: 'Companies · Bliro',
+  flow: 'Bliro Web app prototype',
 };
 const name = process.argv[2];
 if (!PAGES[name]) {

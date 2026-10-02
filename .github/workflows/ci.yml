@@ -40,6 +40,7 @@ jobs:
           npm run example:card
           npm run example:meetings
           npm run example:companies
+          npm run example:flow
 
       - name: Upload example pages
         uses: actions/upload-artifact@v7

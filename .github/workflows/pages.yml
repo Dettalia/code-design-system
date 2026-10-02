@@ -6,6 +6,7 @@ name: Deploy to GitHub Pages
 #   /companies/    example pages built by examples/build.mjs
 #   /meetings/
 #   /card/
+#   /flow/         clickable prototype of the new navigation
 #   /storybook/    static Storybook
 
 on:
@@ -48,6 +49,7 @@ jobs:
           npm run example:card
           npm run example:meetings
           npm run example:companies
+          npm run example:flow
 
       - name: Assemble site
         run: |

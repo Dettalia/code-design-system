@@ -1,20 +1,18 @@
-import React, {useId, useState} from 'react';
+import React, {useId} from 'react';
 import type {Meta, StoryObj} from '@storybook/react-vite';
 import {expect, fn, waitFor, within} from 'storybook/test';
 import {
-  Box,
   Button,
-  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   SvgIcon,
-  Typography,
   type DialogProps,
   type SvgIconProps,
 } from '../index';
-import {AlertTriangleIcon, ModalField, ModalHeader} from '../examples/ModalParts';
+import {ModalField, ModalHeader} from '../examples/ModalParts';
+import {DeleteAccountModal} from '../examples/DeleteAccountModal';
 
 // The Figma "Modal" examples (Bliro Design System, section 12340:4936). Dialog,
 // DialogTitle, DialogContent and DialogActions are styled by the theme; the
@@ -65,56 +63,6 @@ function CreateGroupModal({open, onClose, onConfirm}: ModalProps) {
         </Button>
         <Button variant="contained" onClick={onConfirm}>
           Continue
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-}
-
-function DeleteAccountModal({open, onClose, onConfirm}: ModalProps) {
-  const titleId = useId();
-  const checkboxId = useId();
-  const [acknowledged, setAcknowledged] = useState(false);
-  return (
-    // Figma's wide variant: 560px.
-    <Dialog
-      open={open}
-      onClose={onClose}
-      aria-labelledby={titleId}
-      slotProps={{paper: {sx: {width: 560}}}}
-    >
-      <ModalHeader
-        id={titleId}
-        title="Delete account"
-        onClose={onClose}
-        icon={<AlertTriangleIcon color="error" />}
-      />
-      <DialogContent>
-        <DialogContentText>
-          Deleting your account will permanently remove all your data, including meeting history,
-          summaries, and any personalized settings. This action cannot be undone. If you simply want
-          to stop using the service, you can log out instead.
-        </DialogContentText>
-        <Box sx={{display: 'flex', alignItems: 'center', gap: 2}}>
-          <Checkbox
-            id={checkboxId}
-            color="success"
-            checked={acknowledged}
-            onChange={event => setAcknowledged(event.target.checked)}
-            sx={{p: 0}}
-          />
-          <Typography component="label" htmlFor={checkboxId} variant="bodySmallSemibold">
-            I acknowledge this is an irreversible action and that this account will be permanently
-            deleted.
-          </Typography>
-        </Box>
-      </DialogContent>
-      <DialogActions>
-        <Button variant="outlined" onClick={onClose}>
-          Cancel
-        </Button>
-        <Button variant="contained" color="error" disabled={!acknowledged} onClick={onConfirm}>
-          Delete account
         </Button>
       </DialogActions>
     </Dialog>

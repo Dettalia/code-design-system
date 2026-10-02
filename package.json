@@ -43,6 +43,7 @@
     "example:card": "npm run tokens:build && node examples/build.mjs card",
     "example:meetings": "npm run tokens:build && node examples/build.mjs meetings",
     "example:companies": "npm run tokens:build && node examples/build.mjs companies",
+    "example:flow": "npm run tokens:build && node examples/build.mjs flow",
     "pretest": "npm run tokens:build",
     "test": "jest",
     "changeset": "changeset",

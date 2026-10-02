@@ -458,7 +458,8 @@ export interface CompaniesPageProps {
   onOpenCompany?: (company: Company) => void;
 }
 
-export function CompaniesPage({links, onOpenCompany}: CompaniesPageProps) {
+/** The Companies page content, without the app shell (used by the flow prototype). */
+export function CompaniesContent({onOpenCompany}: Pick<CompaniesPageProps, 'onOpenCompany'>) {
   const [companies, setCompanies] = useState(COMPANIES);
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState<Sort>({key: 'name', direction: 'asc'});
@@ -483,7 +484,7 @@ export function CompaniesPage({links, onOpenCompany}: CompaniesPageProps) {
     );
 
   return (
-    <AppShell selected="Companies" links={links}>
+    <>
       <Box sx={{width: '100%', maxWidth: 1024, display: 'flex', flexDirection: 'column', gap: 3}}>
         {/* Figma header: title left; search + Add company right. */}
         <Box
@@ -589,6 +590,14 @@ export function CompaniesPage({links, onOpenCompany}: CompaniesPageProps) {
           ])
         }
       />
+    </>
+  );
+}
+
+export function CompaniesPage({links, onOpenCompany}: CompaniesPageProps) {
+  return (
+    <AppShell selected="Companies" links={links}>
+      <CompaniesContent onOpenCompany={onOpenCompany} />
     </AppShell>
   );
 }
