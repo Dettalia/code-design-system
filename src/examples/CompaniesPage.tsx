@@ -54,12 +54,16 @@ export interface Company {
   lastMeeting?: string;
   meetings: number;
   logo?: string;
+  /** Company detail page (Figma 8032:74223): Location, Employee count, ICP fit. */
+  location: string;
+  employees: string;
+  icpFit: string;
 }
 
 // "Today" for the example data, so relative dates read the same every time.
 const TODAY = new Date('2026-10-02T12:00:00');
 
-const COMPANIES: Company[] = [
+export const COMPANIES: Company[] = [
   {
     id: 'acme',
     name: 'ACME',
@@ -68,6 +72,9 @@ const COMPANIES: Company[] = [
     lastMeeting: '2026-10-02',
     meetings: 12,
     logo: logoAcme,
+    location: 'United States',
+    employees: '500+',
+    icpFit: 'Core ICP',
   },
   {
     id: 'strategio',
@@ -77,6 +84,9 @@ const COMPANIES: Company[] = [
     lastMeeting: '2026-10-01',
     meetings: 8,
     logo: logoStrategio,
+    location: 'Germany',
+    employees: '2.500+',
+    icpFit: 'Core ICP',
   },
   {
     id: 'durran',
@@ -86,9 +96,13 @@ const COMPANIES: Company[] = [
     lastMeeting: '2026-03-12',
     meetings: 5,
     logo: logoDurran,
+    location: 'Romania',
+    employees: '10+',
+    icpFit: 'Secondary ICP',
   },
   // Not in Figma: more rows, so search, sorting and scrolling can be tried.
-  // Companies without a logo show their initial.
+  // Companies without a logo show their initial. Detail fields (location,
+  // employees, ICP fit) are sample data except Strategio's, which are Figma's.
   {
     id: 'northstar',
     name: 'Northstar Labs',
@@ -96,6 +110,9 @@ const COMPANIES: Company[] = [
     contacts: 9,
     lastMeeting: '2026-09-29',
     meetings: 17,
+    location: 'United Kingdom',
+    employees: '1.000+',
+    icpFit: 'Core ICP',
   },
   {
     id: 'atlas',
@@ -104,6 +121,9 @@ const COMPANIES: Company[] = [
     contacts: 2,
     lastMeeting: '2026-09-18',
     meetings: 3,
+    location: 'Netherlands',
+    employees: '250+',
+    icpFit: 'Secondary ICP',
   },
   {
     id: 'greenfield',
@@ -112,6 +132,9 @@ const COMPANIES: Company[] = [
     contacts: 5,
     lastMeeting: '2026-08-27',
     meetings: 9,
+    location: 'Austria',
+    employees: '50+',
+    icpFit: 'Not a fit',
   },
   {
     id: 'kite',
@@ -120,6 +143,9 @@ const COMPANIES: Company[] = [
     contacts: 1,
     lastMeeting: '2026-07-04',
     meetings: 1,
+    location: 'Germany',
+    employees: '10+',
+    icpFit: 'Not a fit',
   },
   {
     id: 'meridian',
@@ -128,6 +154,9 @@ const COMPANIES: Company[] = [
     contacts: 11,
     lastMeeting: '2026-09-30',
     meetings: 24,
+    location: 'Switzerland',
+    employees: '5.000+',
+    icpFit: 'Core ICP',
   },
 ];
 
@@ -586,7 +615,16 @@ export function CompaniesContent({onOpenCompany}: Pick<CompaniesPageProps, 'onOp
         onAdd={({name, website}) =>
           setCompanies(current => [
             ...current,
-            {id: `${name}-${Date.now()}`, name, website, contacts: 0, meetings: 0},
+            {
+              id: `${name}-${Date.now()}`,
+              name,
+              website,
+              contacts: 0,
+              meetings: 0,
+              location: '—',
+              employees: '—',
+              icpFit: '—',
+            },
           ])
         }
       />

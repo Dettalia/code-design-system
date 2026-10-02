@@ -46,7 +46,14 @@ const {color, radius} = tokens;
 // --- Routes --------------------------------------------------------------------
 
 export type Route =
-  'meetings' | 'vicky' | 'groups' | 'companies' | 'contacts' | 'team' | `settings/${SettingsPage}`;
+  | 'meetings'
+  | 'vicky'
+  | 'groups'
+  | 'companies'
+  | `companies/${string}`
+  | 'contacts'
+  | 'team'
+  | `settings/${SettingsPage}`;
 
 export type SettingsPage =
   | 'account'
@@ -144,7 +151,7 @@ ROUTE_LABELS['settings/account'] = 'My account';
  * (primary) and the others in grey (text.secondary), so the SVG's shape is used
  * as a mask and the color comes from the theme.
  */
-function NavIcon({src, active}: {src: string; active: boolean}) {
+export function NavIcon({src, active}: {src: string; active: boolean}) {
   // Inlined SVG data URLs keep their double quotes, which would end the CSS
   // url("…") early; %22 is the same character, URL-encoded.
   const mask = `url("${src.replace(/"/g, '%22')}") center / contain no-repeat`;
@@ -233,7 +240,8 @@ function Section({
         <NavLink
           key={item.route}
           item={item}
-          active={item.route === current}
+          // Sub-pages (e.g. companies/strategio) keep their section selected.
+          active={current === item.route || current.startsWith(`${item.route}/`)}
           onNavigate={onNavigate}
         />
       ))}
@@ -349,6 +357,11 @@ export interface FlowShellProps {
   onNavigate: (route: Route) => void;
   /** Panel top padding: Figma uses 16px on My meetings and 24px elsewhere. */
   panelTop?: number;
+  /**
+   * Second panel to the right of the page (e.g. the Vicky chat on a company
+   * page). Shown from 1200px; below that it's hidden.
+   */
+  aside?: React.ReactNode;
   children: React.ReactNode;
 }
 
@@ -358,9 +371,10 @@ const SIDEBAR_WIDTH = 240;
 // 2026-10-02; Figma uses #fffbfa). Neither is a design-system token.
 const APP_BACKGROUND = '#fafafa';
 
-export function FlowShell({route, onNavigate, panelTop = 24, children}: FlowShellProps) {
+export function FlowShell({route, onNavigate, panelTop = 24, aside, children}: FlowShellProps) {
   const inSettings = route.startsWith('settings/');
   const desktop = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'), {noSsr: true});
+  const wide = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'), {noSsr: true});
   const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = (next: Route) => {
     setDrawerOpen(false);
@@ -405,40 +419,43 @@ export function FlowShell({route, onNavigate, panelTop = 24, children}: FlowShel
           {sidebar}
         </Drawer>
       )}
-      <Box sx={{flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', p: 1, gap: 1}}>
-        {desktop ? null : (
-          <Box sx={{display: 'flex', alignItems: 'center', gap: 1, px: 0.5}}>
-            <IconButton aria-label="Open menu" onClick={() => setDrawerOpen(true)}>
-              <Box aria-hidden sx={{width: 20, display: 'grid', gap: '4px'}}>
-                {[0, 1, 2].map(i => (
-                  <Box key={i} sx={{height: '1.5px', borderRadius: 1, bgcolor: 'text.primary'}} />
-                ))}
-              </Box>
-            </IconButton>
-            <BliroLogo />
+      <Box sx={{flex: 1, minWidth: 0, display: 'flex', p: 1, gap: 1}}>
+        <Box sx={{flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 1}}>
+          {desktop ? null : (
+            <Box sx={{display: 'flex', alignItems: 'center', gap: 1, px: 0.5}}>
+              <IconButton aria-label="Open menu" onClick={() => setDrawerOpen(true)}>
+                <Box aria-hidden sx={{width: 20, display: 'grid', gap: '4px'}}>
+                  {[0, 1, 2].map(i => (
+                    <Box key={i} sx={{height: '1.5px', borderRadius: 1, bgcolor: 'text.primary'}} />
+                  ))}
+                </Box>
+              </IconButton>
+              <BliroLogo />
+            </Box>
+          )}
+          <Box
+            component="main"
+            sx={{
+              flex: 1,
+              minHeight: 0,
+              overflowY: 'auto',
+              bgcolor: 'background.paper',
+              borderRadius: '24px',
+              // Figma: 0 0 2px rgba(0, 0, 0, 0.12).
+              boxShadow: '0 0 2px rgba(0, 0, 0, 0.12)',
+              pt: `${panelTop}px`,
+              px: {xs: 2, md: 5},
+              pb: 5,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 3,
+            }}
+          >
+            {children}
           </Box>
-        )}
-        <Box
-          component="main"
-          sx={{
-            flex: 1,
-            minHeight: 0,
-            overflowY: 'auto',
-            bgcolor: 'background.paper',
-            borderRadius: '24px',
-            // Figma: 0 0 2px rgba(0, 0, 0, 0.12).
-            boxShadow: '0 0 2px rgba(0, 0, 0, 0.12)',
-            pt: `${panelTop}px`,
-            px: {xs: 2, md: 5},
-            pb: 5,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: 3,
-          }}
-        >
-          {children}
         </Box>
+        {aside && wide ? aside : null}
       </Box>
     </Box>
   );

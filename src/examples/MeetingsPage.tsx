@@ -34,7 +34,7 @@ const GROUPS = {
   closing: {label: 'Closing calls', icon: tagGavel, color: color.green['400']},
 } as const;
 
-type Meeting = {
+export type Meeting = {
   title: string;
   date: string;
   duration: string;
@@ -42,7 +42,7 @@ type Meeting = {
   group?: keyof typeof GROUPS;
 };
 
-const UPCOMING: Meeting[] = [
+export const UPCOMING: Meeting[] = [
   {
     title: 'Q4 Product Roadmap Review',
     date: '24 Sep. 2026 - 09.30',
@@ -65,7 +65,7 @@ const UPCOMING: Meeting[] = [
   },
 ];
 
-const PREVIOUS: Meeting[] = [
+export const PREVIOUS: Meeting[] = [
   {
     title: 'Q4 Product Roadmap Review',
     date: '24 Sep. 2026 - 09.30',
@@ -167,7 +167,7 @@ const Detail = ({icon, children}: {icon: string; children: React.ReactNode}) => 
   </Box>
 );
 
-function MeetingCard({meeting, upcoming}: {meeting: Meeting; upcoming?: boolean}) {
+export function MeetingCard({meeting, upcoming}: {meeting: Meeting; upcoming?: boolean}) {
   return (
     <Card
       variant="outlined"
@@ -225,7 +225,7 @@ function MeetingCard({meeting, upcoming}: {meeting: Meeting; upcoming?: boolean}
   );
 }
 
-function MeetingSection({
+export function MeetingSection({
   title,
   meetings,
   upcoming,

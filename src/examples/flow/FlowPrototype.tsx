@@ -1,18 +1,30 @@
 import React, {useEffect, useState} from 'react';
 import {Box, Button, Snackbar, Typography} from '../../index';
-import {CompaniesContent} from '../CompaniesPage';
+import {COMPANIES, CompaniesContent, type Company} from '../CompaniesPage';
 import {MeetingsContent} from '../MeetingsPage';
 import {FlowShell, ROUTE_LABELS, type Route} from './FlowShell';
+import {CompanyDetailPage, type CompanyTab} from './CompanyDetailPage';
 import {MyAccountPage} from './MyAccountPage';
+import {VickyChatPanel} from './VickyChatPanel';
 
 // Clickable prototype of the Figma flow "Section 3" (Bliro Web app,
-// 8032:74222): Meetings, Companies and Settings / My account in the new
-// navigation. The URL hash holds the current page (#/companies), so pages can
+// 8032:74222): Meetings, Companies, a company's detail page and Settings / My
+// account in the new navigation. The URL hash holds the current page (#/companies), so pages can
 // be linked directly and the browser's back button works.
+
+// Company pages: companies/<id> (Overview), companies/<id>/meetings, companies/<id>/people.
+const COMPANY_ROUTE = /^companies\/([^/]+)(?:\/(meetings|people))?$/;
+
+function parseCompanyRoute(route: Route): {id: string; tab: CompanyTab} | null {
+  const match = COMPANY_ROUTE.exec(route);
+  return match ? {id: match[1], tab: (match[2] as CompanyTab | undefined) ?? 'overview'} : null;
+}
 
 function readRoute(): Route {
   const hash = window.location.hash.replace(/^#\/?/, '') as Route;
-  return hash in ROUTE_LABELS ? hash : 'meetings';
+  if (hash in ROUTE_LABELS) return hash;
+  const company = parseCompanyRoute(hash);
+  return company && COMPANIES.some(c => c.id === company.id) ? hash : 'meetings';
 }
 
 /** Not in Figma: pages in the navigation that have no design yet. */
@@ -61,6 +73,12 @@ function NotDesigned({route, onNavigate}: {route: Route; onNavigate: (r: Route) 
 export function FlowPrototype({initialRoute}: {initialRoute?: Route}) {
   const [route, setRoute] = useState<Route>(() => initialRoute ?? readRoute());
   const [message, setMessage] = useState<string | null>(null);
+  // Companies added in the prototype aren't in COMPANIES; remember the ones opened.
+  const [opened, setOpened] = useState<Company[]>([]);
+  const companyRoute = parseCompanyRoute(route);
+  const company = companyRoute
+    ? [...COMPANIES, ...opened].find(c => c.id === companyRoute.id)
+    : undefined;
 
   useEffect(() => {
     const onHashChange = () => setRoute(readRoute());
@@ -69,8 +87,8 @@ export function FlowPrototype({initialRoute}: {initialRoute?: Route}) {
   }, []);
 
   useEffect(() => {
-    document.title = `${ROUTE_LABELS[route]} · Bliro`;
-  }, [route]);
+    document.title = `${company ? company.name : ROUTE_LABELS[route]} · Bliro`;
+  }, [route, company]);
 
   const navigate = (next: Route) => {
     setRoute(next);
@@ -82,9 +100,20 @@ export function FlowPrototype({initialRoute}: {initialRoute?: Route}) {
   else if (route === 'companies')
     page = (
       <CompaniesContent
-        onOpenCompany={company =>
-          setMessage(`${company.name}: company details aren't in this prototype yet.`)
-        }
+        onOpenCompany={c => {
+          if (!COMPANIES.includes(c)) setOpened(list => [...list.filter(o => o.id !== c.id), c]);
+          navigate(`companies/${c.id}`);
+        }}
+      />
+    );
+  else if (companyRoute && company)
+    page = (
+      <CompanyDetailPage
+        company={company}
+        tab={companyRoute.tab}
+        onTab={tab => navigate(tab === 'overview' ? `companies/${company.id}` : `companies/${company.id}/${tab}`)}
+        onBack={() => navigate('companies')}
+        onNotDesigned={what => setMessage(`${what} aren't in this prototype yet.`)}
       />
     );
   else if (route === 'settings/account')
@@ -100,7 +129,12 @@ export function FlowPrototype({initialRoute}: {initialRoute?: Route}) {
 
   return (
     <>
-      <FlowShell route={route} onNavigate={navigate} panelTop={route === 'meetings' ? 16 : 24}>
+      <FlowShell
+        route={route}
+        onNavigate={navigate}
+        panelTop={route === 'meetings' ? 16 : 24}
+        aside={company ? <VickyChatPanel companyName={company.name} /> : undefined}
+      >
         {page}
       </FlowShell>
       <Snackbar
