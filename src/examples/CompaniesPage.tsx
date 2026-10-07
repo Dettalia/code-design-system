@@ -54,7 +54,7 @@ export interface Company {
   lastMeeting?: string;
   meetings: number;
   logo?: string;
-  /** Company detail page (Figma 8032:74223): Location, Employee count, ICP fit. */
+  /** Company detail page (Figma 8032:74223): Location, Employees, ICP fit. Empty when unknown. */
   location: string;
   employees: string;
   icpFit: string;
@@ -98,7 +98,7 @@ export const COMPANIES: Company[] = [
     logo: logoDurran,
     location: 'Romania',
     employees: '10+',
-    icpFit: 'Secondary ICP',
+    icpFit: 'OK ICP',
   },
   // Not in Figma: more rows, so search, sorting and scrolling can be tried.
   // Companies without a logo show their initial. Detail fields (location,
@@ -123,7 +123,7 @@ export const COMPANIES: Company[] = [
     meetings: 3,
     location: 'Netherlands',
     employees: '250+',
-    icpFit: 'Secondary ICP',
+    icpFit: 'OK ICP',
   },
   {
     id: 'greenfield',
@@ -134,7 +134,7 @@ export const COMPANIES: Company[] = [
     meetings: 9,
     location: 'Austria',
     employees: '50+',
-    icpFit: 'Not a fit',
+    icpFit: 'No ICP',
   },
   {
     id: 'kite',
@@ -145,7 +145,7 @@ export const COMPANIES: Company[] = [
     meetings: 1,
     location: 'Germany',
     employees: '10+',
-    icpFit: 'Not a fit',
+    icpFit: 'No ICP',
   },
   {
     id: 'meridian',
@@ -616,14 +616,15 @@ export function CompaniesContent({onOpenCompany}: Pick<CompaniesPageProps, 'onOp
           setCompanies(current => [
             ...current,
             {
-              id: `${name}-${Date.now()}`,
+              // URL-safe, since the prototype puts it in the address (#/companies/<id>).
+              id: `${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${Date.now()}`,
               name,
               website,
               contacts: 0,
               meetings: 0,
-              location: '—',
-              employees: '—',
-              icpFit: '—',
+              location: '',
+              employees: '',
+              icpFit: '',
             },
           ])
         }

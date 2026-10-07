@@ -20,11 +20,11 @@ function parseCompanyRoute(route: Route): {id: string; tab: CompanyTab} | null {
   return match ? {id: match[1], tab: (match[2] as CompanyTab | undefined) ?? 'overview'} : null;
 }
 
-function readRoute(): Route {
+function readRoute(known: Company[] = COMPANIES): Route {
   const hash = window.location.hash.replace(/^#\/?/, '') as Route;
   if (hash in ROUTE_LABELS) return hash;
   const company = parseCompanyRoute(hash);
-  return company && COMPANIES.some(c => c.id === company.id) ? hash : 'meetings';
+  return company && known.some(c => c.id === company.id) ? hash : 'meetings';
 }
 
 /** Not in Figma: pages in the navigation that have no design yet. */
@@ -75,20 +75,24 @@ export function FlowPrototype({initialRoute}: {initialRoute?: Route}) {
   const [message, setMessage] = useState<string | null>(null);
   // Companies added in the prototype aren't in COMPANIES; remember the ones opened.
   const [opened, setOpened] = useState<Company[]>([]);
+  // Details edited on the company page, kept while the prototype is open.
+  const [edits, setEdits] = useState<Record<string, Partial<Company>>>({});
   const companyRoute = parseCompanyRoute(route);
-  const company = companyRoute
+  const base = companyRoute
     ? [...COMPANIES, ...opened].find(c => c.id === companyRoute.id)
     : undefined;
+  const company = base && {...base, ...edits[base.id]};
+  const companyName = company?.name;
 
   useEffect(() => {
-    const onHashChange = () => setRoute(readRoute());
+    const onHashChange = () => setRoute(readRoute([...COMPANIES, ...opened]));
     window.addEventListener('hashchange', onHashChange);
     return () => window.removeEventListener('hashchange', onHashChange);
-  }, []);
+  }, [opened]);
 
   useEffect(() => {
-    document.title = `${company ? company.name : ROUTE_LABELS[route]} · Bliro`;
-  }, [route, company]);
+    document.title = `${companyName ?? ROUTE_LABELS[route]} · Bliro`;
+  }, [route, companyName]);
 
   const navigate = (next: Route) => {
     setRoute(next);
@@ -113,6 +117,7 @@ export function FlowPrototype({initialRoute}: {initialRoute?: Route}) {
         tab={companyRoute.tab}
         onTab={tab => navigate(tab === 'overview' ? `companies/${company.id}` : `companies/${company.id}/${tab}`)}
         onBack={() => navigate('companies')}
+        onEdit={changes => setEdits(all => ({...all, [company.id]: {...all[company.id], ...changes}}))}
         onNotDesigned={what => setMessage(`${what} aren't in this prototype yet.`)}
       />
     );

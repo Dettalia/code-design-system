@@ -30,6 +30,46 @@ export const CompanyDetail: Story = {
   args: {initialRoute: 'companies/strategio'},
 };
 
+// Editing company details in place (Figma 8117:120063): text fields save on
+// Enter, Escape reverts, dropdowns pick or clear a value.
+export const EditCompanyDetails: Story = {
+  args: {initialRoute: 'companies/strategio'},
+  play: async ({canvas, canvasElement, userEvent}) => {
+    const body = within(canvasElement.ownerDocument.body);
+
+    const website = await canvas.findByRole('textbox', {name: 'Website'});
+    await userEvent.click(website);
+    await userEvent.clear(website);
+    await userEvent.type(website, 'strategio.io{Enter}');
+    await expect(website).toHaveValue('strategio.io');
+    await expect(website).not.toHaveFocus();
+
+    const employees = canvas.getByRole('textbox', {name: 'Employees'});
+    await userEvent.click(employees);
+    await userEvent.clear(employees);
+    await userEvent.type(employees, '9{Escape}');
+    await expect(employees).toHaveValue('2.500+');
+
+    await userEvent.click(canvas.getByRole('button', {name: 'Location: Germany'}));
+    await userEvent.click(await body.findByRole('option', {name: 'Romania'}));
+    await expect(canvas.getByRole('button', {name: 'Location: Romania'})).toBeVisible();
+    await waitFor(() => expect(body.queryByRole('listbox')).toBeNull());
+
+    // Clear leaves the menu open with the placeholder, then pick a new value.
+    await userEvent.click(canvas.getByRole('button', {name: 'ICP fit: Core ICP'}));
+    await userEvent.click(canvas.getByRole('button', {name: 'Clear ICP fit'}));
+    await expect(canvas.getByRole('button', {name: 'ICP fit: not set'})).toHaveTextContent('Select ICP fit');
+    await expect(body.getByRole('listbox', {name: 'ICP fit'})).toBeVisible();
+    await userEvent.click(await body.findByRole('option', {name: 'OK ICP'}));
+    await expect(canvas.getByRole('button', {name: 'ICP fit: OK ICP'})).toBeVisible();
+
+    // Edits stay when switching tabs.
+    await userEvent.click(canvas.getByRole('tab', {name: 'People'}));
+    await userEvent.click(canvas.getByRole('tab', {name: 'Overview'}));
+    await expect(await canvas.findByRole('textbox', {name: 'Website'})).toHaveValue('strategio.io');
+  },
+};
+
 export const CompanyMeetings: Story = {args: {initialRoute: 'companies/strategio/meetings'}};
 
 export const CompanyPeople: Story = {args: {initialRoute: 'companies/strategio/people'}};

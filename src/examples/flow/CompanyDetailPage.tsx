@@ -29,6 +29,7 @@ import usersIcon from '../company-assets/users.svg';
 import logoRing24 from '../companies-assets/logo-ring.svg';
 import sortArrowDown from '../companies-assets/sort-arrow-down.svg';
 import plusIcon from '../companies-assets/plus.svg';
+import {EditableSelect, EditableText} from './EditableDetail';
 import {NavIcon} from './FlowShell';
 
 // Company detail page from Figma (Bliro Web app, frame 8032:74223) with the
@@ -94,28 +95,61 @@ const ViewAll = ({onClick, label}: {onClick: () => void; label: string}) => (
 
 // --- Overview ------------------------------------------------------------------
 
-function DetailRow({icon, label, value}: {icon: string; label: string; value: string}) {
+// Options from the Figma dropdown menus (8117:120716, 8117:120756), plus the
+// countries used in the example data.
+const COUNTRIES = [
+  'Austria',
+  'England',
+  'Germany',
+  'Hungary',
+  'Netherlands',
+  'Romania',
+  'Spain',
+  'Switzerland',
+  'United Kingdom',
+  'United States',
+] as const;
+const ICP_FITS = ['OK ICP', 'Core ICP', 'No ICP'] as const;
+
+type EditableDetails = Pick<Company, 'location' | 'website' | 'employees' | 'icpFit'>;
+
+function DetailLabel({icon, label}: {icon: string; label: string}) {
   return (
-    <>
-      <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
-        <Img src={icon} />
-        <Typography variant="bodySmallMedium" color="textSecondary" noWrap>
-          {label}
-        </Typography>
-      </Box>
-      <Typography variant="bodySmallRegular" noWrap sx={{color: 'text.primary'}}>
-        {value}
+    <Box sx={{display: 'flex', alignItems: 'center', gap: 1, height: 32}}>
+      <Img src={icon} />
+      <Typography variant="bodySmallMedium" color="textSecondary" noWrap>
+        {label}
       </Typography>
-    </>
+    </Box>
   );
 }
+
+// Figma: a 96px label column, 16px gap, then the 205px value field; rows 16px apart.
+const detailColumnSx = {
+  display: 'grid',
+  gridTemplateColumns: '96px minmax(0, 1fr)',
+  columnGap: 2,
+  rowGap: 2,
+  alignItems: 'center',
+  minWidth: 0,
+} as const;
 
 const NOTES = Array.from({length: 4}, () => ({
   title: 'Need time',
   text: 'Michael needs more time to take a decision, needs approval from management',
 }));
 
-function Overview({company, onTab, onNote}: {company: Company; onTab: (t: CompanyTab) => void; onNote: () => void}) {
+function Overview({
+  company,
+  onTab,
+  onNote,
+  onEdit,
+}: {
+  company: Company;
+  onTab: (t: CompanyTab) => void;
+  onNote: () => void;
+  onEdit: (changes: Partial<EditableDetails>) => void;
+}) {
   // Figma lists three meetings; use the company's most recent ones.
   const meetings = [PREVIOUS[2], PREVIOUS[1], PREVIOUS[3]];
   return (
@@ -132,17 +166,44 @@ function Overview({company, onTab, onNote}: {company: Company; onTab: (t: Compan
           p: 2,
           display: 'grid',
           gridTemplateColumns: {xs: '1fr', sm: '1fr 1fr'},
-          columnGap: 5,
+          columnGap: 4,
           rowGap: 2,
         }}
       >
-        <Box sx={{display: 'grid', gridTemplateColumns: 'auto 1fr', columnGap: 3, rowGap: 2, minWidth: 0}}>
-          <DetailRow icon={mapPinIcon} label="Location" value={company.location} />
-          <DetailRow icon={globeIcon} label="Website" value={`www.${company.website}`} />
+        {/* Each value edits in place (Figma "Component 75"); changes save on Enter, blur or pick. */}
+        <Box sx={detailColumnSx}>
+          <DetailLabel icon={mapPinIcon} label="Location" />
+          <EditableSelect
+            label="Location"
+            value={company.location}
+            options={COUNTRIES}
+            placeholder="Select country"
+            onSave={location => onEdit({location})}
+          />
+          <DetailLabel icon={globeIcon} label="Website" />
+          <EditableText
+            label="Website"
+            value={company.website}
+            placeholder="Add website"
+            onSave={website => onEdit({website: website.replace(/^https?:\/\//, '')})}
+          />
         </Box>
-        <Box sx={{display: 'grid', gridTemplateColumns: '128px 1fr', columnGap: 3, rowGap: 2, minWidth: 0}}>
-          <DetailRow icon={usersIcon} label="Employee count" value={company.employees} />
-          <DetailRow icon={tagIcon} label="ICP fit" value={company.icpFit} />
+        <Box sx={detailColumnSx}>
+          <DetailLabel icon={usersIcon} label="Employees" />
+          <EditableText
+            label="Employees"
+            value={company.employees}
+            placeholder="Add employee count"
+            onSave={employees => onEdit({employees})}
+          />
+          <DetailLabel icon={tagIcon} label="ICP fit" />
+          <EditableSelect
+            label="ICP fit"
+            value={company.icpFit}
+            options={ICP_FITS}
+            placeholder="Select ICP fit"
+            onSave={icpFit => onEdit({icpFit})}
+          />
         </Box>
       </Box>
 
@@ -276,11 +337,13 @@ export interface CompanyDetailPageProps {
   tab: CompanyTab;
   onTab: (tab: CompanyTab) => void;
   onBack: () => void;
+  /** Saves edits to Location, Website, Employees or ICP fit. */
+  onEdit?: (changes: Partial<EditableDetails>) => void;
   /** For parts that aren't in the prototype (notes, adding contacts). */
   onNotDesigned?: (what: string) => void;
 }
 
-export function CompanyDetailPage({company, tab, onTab, onBack, onNotDesigned}: CompanyDetailPageProps) {
+export function CompanyDetailPage({company, tab, onTab, onBack, onEdit, onNotDesigned}: CompanyDetailPageProps) {
   return (
     <Box sx={{width: '100%', display: 'flex', flexDirection: 'column', gap: 3}}>
       {/* Header: back, logo, name */}
@@ -330,7 +393,7 @@ export function CompanyDetailPage({company, tab, onTab, onBack, onNotDesigned}: 
       </Tabs>
 
       {tab === 'overview' ? (
-        <Overview company={company} onTab={onTab} onNote={() => onNotDesigned?.('Notes')} />
+        <Overview company={company} onTab={onTab} onNote={() => onNotDesigned?.('Notes')} onEdit={changes => onEdit?.(changes)} />
       ) : tab === 'meetings' ? (
         <MeetingsTab />
       ) : (
