@@ -14,6 +14,7 @@ import {
 import chevronDown from '../company-assets/chevron-down-20.svg';
 import chevronUp from '../company-assets/chevron-up.svg';
 import xClear from '../company-assets/x-clear.svg';
+import checkIcon from '../fields-assets/check-16.svg';
 
 // Inline-editable company detail values from Figma (Bliro Web app, component
 // set "Component 75", 8117:120449). States: default (plain text), hover
@@ -60,11 +61,15 @@ export interface EditableTextProps {
   label: string;
   value: string;
   placeholder?: string;
+  /** Input kind for custom fields: numbers get a numeric keyboard and are checked on save. */
+  type?: 'text' | 'number' | 'url' | 'date';
   onSave: (value: string) => void;
 }
 
+const NUMBER = /^[-+]?[\d.,\s]*\+?$/;
+
 /** Type=input: a borderless text field; Enter or leaving the field saves, Escape reverts. */
-export function EditableText({label, value, placeholder, onSave}: EditableTextProps) {
+export function EditableText({label, value, placeholder, type = 'text', onSave}: EditableTextProps) {
   const [draft, setDraft] = useState<string | null>(null);
   const reverting = useRef(false);
   const editing = draft !== null;
@@ -76,7 +81,9 @@ export function EditableText({label, value, placeholder, onSave}: EditableTextPr
       onFocus={() => setDraft(value)}
       onChange={event => setDraft(event.target.value)}
       onBlur={() => {
-        if (!reverting.current && draft !== null && draft.trim() !== value) onSave(draft.trim());
+        const next = draft?.trim() ?? value;
+        const valid = type !== 'number' || NUMBER.test(next);
+        if (!reverting.current && valid && next !== value) onSave(next);
         reverting.current = false;
         setDraft(null);
       }}
@@ -87,10 +94,16 @@ export function EditableText({label, value, placeholder, onSave}: EditableTextPr
           (event.target as HTMLInputElement).blur();
         }
       }}
-      inputProps={{'aria-label': label}}
+      type={type === 'date' ? 'date' : type === 'url' ? 'url' : 'text'}
+      inputProps={{'aria-label': label, inputMode: type === 'number' ? 'decimal' : undefined}}
       sx={theme => ({
         ...fieldSx,
         ...(editing ? activeSx : {}),
+        // Date fields: the browser's calendar button only on hover or while editing.
+        '& input::-webkit-calendar-picker-indicator': {opacity: 0, cursor: 'pointer'},
+        '&:hover input::-webkit-calendar-picker-indicator, & input:focus::-webkit-calendar-picker-indicator':
+          {opacity: 0.6},
+        ...(type === 'date' && !value && !editing ? {'& input': {color: theme.palette.text.disabled}} : {}),
         '& input': {
           ...theme.typography.bodySmallRegular,
           p: '0 9px',
@@ -104,17 +117,29 @@ export function EditableText({label, value, placeholder, onSave}: EditableTextPr
   );
 }
 
-export interface EditableSelectProps {
+interface SelectBaseProps {
   label: string;
-  value: string;
   options: readonly string[];
   /** Shown when there's no value, e.g. after clearing it ("Select country"). */
   placeholder: string;
-  onSave: (value: string) => void;
 }
 
-/** Type=dropdown: opens a menu of options; the × clears the value. */
-export function EditableSelect({label, value, options, placeholder, onSave}: EditableSelectProps) {
+export type EditableSelectProps = SelectBaseProps &
+  (
+    | {multiple?: false; value: string; onSave: (value: string) => void}
+    | {multiple: true; value: string[]; onSave: (value: string[]) => void}
+  );
+
+/**
+ * Type=dropdown: opens a menu of options; the × clears the value. With
+ * `multiple` (not in Figma), options toggle with a check and the menu stays open.
+ */
+export function EditableSelect(props: EditableSelectProps) {
+  const {label, options, placeholder} = props;
+  const selected = props.multiple ? props.value : props.value ? [props.value] : [];
+  const value = selected.join(', ');
+  const save = (next: string[]) =>
+    props.multiple ? props.onSave(next) : props.onSave(next[0] ?? '');
   const trigger = useRef<HTMLButtonElement>(null);
   // The field box the menu hangs from; set when it opens.
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
@@ -178,7 +203,7 @@ export function EditableSelect({label, value, options, placeholder, onSave}: Edi
       {open && value ? (
         <IconButton
           aria-label={`Clear ${label}`}
-          onClick={() => onSave('')}
+          onClick={() => save([])}
           sx={{position: 'absolute', right: 30, width: 24, height: 24, p: '2px', borderRadius: `${radius.sm}px`}}
         >
           <Icon src={xClear} />
@@ -210,6 +235,7 @@ export function EditableSelect({label, value, options, placeholder, onSave}: Edi
               autoFocusItem
               role="listbox"
               aria-label={label}
+              aria-multiselectable={props.multiple || undefined}
               onKeyDown={event => {
                 if (event.key === 'Escape' || event.key === 'Tab') close();
               }}
@@ -227,11 +253,19 @@ export function EditableSelect({label, value, options, placeholder, onSave}: Edi
                 <MenuItem
                   key={option}
                   role="option"
-                  selected={option === value}
-                  aria-selected={option === value}
+                  selected={selected.includes(option)}
+                  aria-selected={selected.includes(option)}
                   onClick={() => {
-                    onSave(option);
-                    close();
+                    if (props.multiple) {
+                      // Keep the list's order rather than the order of clicks.
+                      const next = selected.includes(option)
+                        ? selected.filter(o => o !== option)
+                        : options.filter(o => o === option || selected.includes(o));
+                      save(next);
+                    } else {
+                      save([option]);
+                      close();
+                    }
                   }}
                   sx={{
                     minHeight: 40,
@@ -240,9 +274,12 @@ export function EditableSelect({label, value, options, placeholder, onSave}: Edi
                     borderRadius: `${radius.lg}px`,
                     typography: 'bodySmallMedium',
                     color: color.neutral['950'],
+                    justifyContent: 'space-between',
+                    gap: 1,
                   }}
                 >
                   {option}
+                  {props.multiple && selected.includes(option) ? <Icon src={checkIcon} /> : null}
                 </MenuItem>
               ))}
             </MenuList>

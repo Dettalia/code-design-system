@@ -27,6 +27,7 @@ import navTeam from '../flow-assets/nav-team.svg';
 import setApiAccess from '../flow-assets/set-api-access.svg';
 import setBack from '../flow-assets/set-back.svg';
 import setBilling from '../flow-assets/set-billing.svg';
+import setCompanyFields from '../fields-assets/list-settings-20.svg';
 import setDictionary from '../flow-assets/set-dictionary.svg';
 import setIntegrations from '../flow-assets/set-integrations.svg';
 import setMcp from '../flow-assets/set-mcp.svg';
@@ -61,6 +62,7 @@ export type SettingsPage =
   | 'dictionary'
   | 'skills'
   | 'general'
+  | 'company-fields'
   | 'members'
   | 'billing'
   | 'usage'
@@ -115,6 +117,8 @@ const SETTINGS: NavSection[] = [
     items: [
       // Same Figma icons as Companies and Team.
       {route: 'settings/general', label: 'General', icon: navCompanies},
+      // Not in Figma: the company fields proposal.
+      {route: 'settings/company-fields', label: 'Company fields', icon: setCompanyFields},
       {route: 'settings/members', label: 'Members', icon: navTeam},
       {route: 'settings/billing', label: 'Billing', icon: setBilling},
       {route: 'settings/usage', label: 'Usage', icon: setUsage},
@@ -152,20 +156,18 @@ ROUTE_LABELS['settings/account'] = 'My account';
  * as a mask and the color comes from the theme.
  */
 export function NavIcon({src, active}: {src: string; active: boolean}) {
+  return <MaskIcon src={src} color={active ? 'primary.main' : 'text.secondary'} />;
+}
+
+/** An exported Figma icon's shape, filled with a theme color (e.g. white on a contained button). */
+export function MaskIcon({src, color, size = 20}: {src: string; color: string; size?: number}) {
   // Inlined SVG data URLs keep their double quotes, which would end the CSS
   // url("…") early; %22 is the same character, URL-encoded.
   const mask = `url("${src.replace(/"/g, '%22')}") center / contain no-repeat`;
   return (
     <Box
       aria-hidden
-      sx={{
-        width: 20,
-        height: 20,
-        flexShrink: 0,
-        bgcolor: active ? 'primary.main' : 'text.secondary',
-        mask,
-        WebkitMask: mask,
-      }}
+      sx={{width: size, height: size, flexShrink: 0, bgcolor: color, mask, WebkitMask: mask}}
     />
   );
 }

@@ -4,6 +4,8 @@ import {COMPANIES, CompaniesContent, type Company} from '../CompaniesPage';
 import {MeetingsContent} from '../MeetingsPage';
 import {FlowShell, ROUTE_LABELS, type Route} from './FlowShell';
 import {CompanyDetailPage, type CompanyTab} from './CompanyDetailPage';
+import {CompanyFieldsPage} from './CompanyFieldsPage';
+import {CUSTOM_VALUES, DEFAULT_FIELDS, type CompanyField, type FieldValue} from './companyFields';
 import {MyAccountPage} from './MyAccountPage';
 import {VickyChatPanel} from './VickyChatPanel';
 
@@ -54,7 +56,7 @@ function NotDesigned({route, onNavigate}: {route: Route; onNavigate: (r: Route) 
           component="p"
           sx={{mt: 0.5, mb: 2}}
         >
-          The prototype covers Meetings, Companies and Settings › My account.
+          The prototype covers Meetings, Companies, Settings › My account and Settings › Company fields.
         </Typography>
         <Button
           variant="outlined"
@@ -77,6 +79,9 @@ export function FlowPrototype({initialRoute}: {initialRoute?: Route}) {
   const [opened, setOpened] = useState<Company[]>([]);
   // Details edited on the company page, kept while the prototype is open.
   const [edits, setEdits] = useState<Record<string, Partial<Company>>>({});
+  // The organization's company fields (Settings › Company fields) and custom field values.
+  const [fields, setFields] = useState<CompanyField[]>(DEFAULT_FIELDS);
+  const [customValues, setCustomValues] = useState(CUSTOM_VALUES);
   const companyRoute = parseCompanyRoute(route);
   const base = companyRoute
     ? [...COMPANIES, ...opened].find(c => c.id === companyRoute.id)
@@ -117,10 +122,25 @@ export function FlowPrototype({initialRoute}: {initialRoute?: Route}) {
         tab={companyRoute.tab}
         onTab={tab => navigate(tab === 'overview' ? `companies/${company.id}` : `companies/${company.id}/${tab}`)}
         onBack={() => navigate('companies')}
-        onEdit={changes => setEdits(all => ({...all, [company.id]: {...all[company.id], ...changes}}))}
+        details={{
+          fields,
+          custom: customValues[company.id] ?? {},
+          onEditValue: (field, value: FieldValue) => {
+            if (field.builtIn) {
+              const key = field.builtIn;
+              setEdits(all => ({...all, [company.id]: {...all[company.id], [key]: value as string}}));
+            } else {
+              setCustomValues(all => ({...all, [company.id]: {...all[company.id], [field.id]: value}}));
+            }
+          },
+          onFieldsChange: setFields,
+          onOpenFieldSettings: () => navigate('settings/company-fields'),
+        }}
         onNotDesigned={what => setMessage(`${what} aren't in this prototype yet.`)}
       />
     );
+  else if (route === 'settings/company-fields')
+    page = <CompanyFieldsPage fields={fields} onChange={setFields} />;
   else if (route === 'settings/account')
     page = (
       <MyAccountPage

@@ -16,20 +16,16 @@ import avatarDaniel from '../company-assets/avatar-daniel.png';
 import avatarMaya from '../company-assets/avatar-maya.png';
 import avatarSofia from '../company-assets/avatar-sofia.png';
 import backIcon from '../company-assets/back.svg';
-import globeIcon from '../company-assets/globe.svg';
 import logoRing32 from '../company-assets/logo-ring-32.svg';
 import logoStrategio32 from '../company-assets/logo-strategio-32.png';
-import mapPinIcon from '../company-assets/map-pin.svg';
 import notebookPen from '../company-assets/notebook-pen.svg';
 import tabMeetings from '../company-assets/tab-meetings.svg';
 import tabOverview from '../company-assets/tab-overview.svg';
 import tabPeople from '../company-assets/tab-people.svg';
-import tagIcon from '../company-assets/tag.svg';
-import usersIcon from '../company-assets/users.svg';
 import logoRing24 from '../companies-assets/logo-ring.svg';
 import sortArrowDown from '../companies-assets/sort-arrow-down.svg';
 import plusIcon from '../companies-assets/plus.svg';
-import {EditableSelect, EditableText} from './EditableDetail';
+import {CompanyDetailsCard, type CompanyDetailsCardProps} from './CompanyDetailsCard';
 import {NavIcon} from './FlowShell';
 
 // Company detail page from Figma (Bliro Web app, frame 8032:74223) with the
@@ -95,117 +91,29 @@ const ViewAll = ({onClick, label}: {onClick: () => void; label: string}) => (
 
 // --- Overview ------------------------------------------------------------------
 
-// Options from the Figma dropdown menus (8117:120716, 8117:120756), plus the
-// countries used in the example data.
-const COUNTRIES = [
-  'Austria',
-  'England',
-  'Germany',
-  'Hungary',
-  'Netherlands',
-  'Romania',
-  'Spain',
-  'Switzerland',
-  'United Kingdom',
-  'United States',
-] as const;
-const ICP_FITS = ['OK ICP', 'Core ICP', 'No ICP'] as const;
-
-type EditableDetails = Pick<Company, 'location' | 'website' | 'employees' | 'icpFit'>;
-
-function DetailLabel({icon, label}: {icon: string; label: string}) {
-  return (
-    <Box sx={{display: 'flex', alignItems: 'center', gap: 1, height: 32}}>
-      <Img src={icon} />
-      <Typography variant="bodySmallMedium" color="textSecondary" noWrap>
-        {label}
-      </Typography>
-    </Box>
-  );
-}
-
-// Figma: a 96px label column, 16px gap, then the 205px value field; rows 16px apart.
-const detailColumnSx = {
-  display: 'grid',
-  gridTemplateColumns: '96px minmax(0, 1fr)',
-  columnGap: 2,
-  rowGap: 2,
-  alignItems: 'center',
-  minWidth: 0,
-} as const;
-
 const NOTES = Array.from({length: 4}, () => ({
   title: 'Need time',
   text: 'Michael needs more time to take a decision, needs approval from management',
 }));
 
+type DetailsProps = Omit<CompanyDetailsCardProps, 'company'>;
+
 function Overview({
   company,
   onTab,
   onNote,
-  onEdit,
+  details,
 }: {
   company: Company;
   onTab: (t: CompanyTab) => void;
   onNote: () => void;
-  onEdit: (changes: Partial<EditableDetails>) => void;
+  details: DetailsProps;
 }) {
   // Figma lists three meetings; use the company's most recent ones.
   const meetings = [PREVIOUS[2], PREVIOUS[1], PREVIOUS[3]];
   return (
     <>
-      <Typography variant="bodyNormalSemibold" component="h2">
-        Overview
-      </Typography>
-
-      {/* Details card: two label/value columns */}
-      <Box
-        sx={{
-          border: hairline,
-          borderRadius: `${radius['2xl']}px`,
-          p: 2,
-          display: 'grid',
-          gridTemplateColumns: {xs: '1fr', sm: '1fr 1fr'},
-          columnGap: 4,
-          rowGap: 2,
-        }}
-      >
-        {/* Each value edits in place (Figma "Component 75"); changes save on Enter, blur or pick. */}
-        <Box sx={detailColumnSx}>
-          <DetailLabel icon={mapPinIcon} label="Location" />
-          <EditableSelect
-            label="Location"
-            value={company.location}
-            options={COUNTRIES}
-            placeholder="Select country"
-            onSave={location => onEdit({location})}
-          />
-          <DetailLabel icon={globeIcon} label="Website" />
-          <EditableText
-            label="Website"
-            value={company.website}
-            placeholder="Add website"
-            onSave={website => onEdit({website: website.replace(/^https?:\/\//, '')})}
-          />
-        </Box>
-        <Box sx={detailColumnSx}>
-          <DetailLabel icon={usersIcon} label="Employees" />
-          <EditableText
-            label="Employees"
-            value={company.employees}
-            placeholder="Add employee count"
-            onSave={employees => onEdit({employees})}
-          />
-          <DetailLabel icon={tagIcon} label="ICP fit" />
-          <EditableSelect
-            label="ICP fit"
-            value={company.icpFit}
-            options={ICP_FITS}
-            placeholder="Select ICP fit"
-            onSave={icpFit => onEdit({icpFit})}
-          />
-        </Box>
-      </Box>
+      <CompanyDetailsCard company={company} {...details} />
 
       <Box component="section" aria-label="Meetings" sx={{display: 'flex', flexDirection: 'column', gap: 1}}>
         <SectionHeader title="Meetings" action={<ViewAll label="View all meetings" onClick={() => onTab('meetings')} />} />
@@ -337,13 +245,13 @@ export interface CompanyDetailPageProps {
   tab: CompanyTab;
   onTab: (tab: CompanyTab) => void;
   onBack: () => void;
-  /** Saves edits to Location, Website, Employees or ICP fit. */
-  onEdit?: (changes: Partial<EditableDetails>) => void;
+  /** Company details: the organization's fields, this company's values, and editing them. */
+  details: DetailsProps;
   /** For parts that aren't in the prototype (notes, adding contacts). */
   onNotDesigned?: (what: string) => void;
 }
 
-export function CompanyDetailPage({company, tab, onTab, onBack, onEdit, onNotDesigned}: CompanyDetailPageProps) {
+export function CompanyDetailPage({company, tab, onTab, onBack, details, onNotDesigned}: CompanyDetailPageProps) {
   return (
     <Box sx={{width: '100%', display: 'flex', flexDirection: 'column', gap: 3}}>
       {/* Header: back, logo, name */}
@@ -393,7 +301,7 @@ export function CompanyDetailPage({company, tab, onTab, onBack, onEdit, onNotDes
       </Tabs>
 
       {tab === 'overview' ? (
-        <Overview company={company} onTab={onTab} onNote={() => onNotDesigned?.('Notes')} onEdit={changes => onEdit?.(changes)} />
+        <Overview company={company} onTab={onTab} onNote={() => onNotDesigned?.('Notes')} details={details} />
       ) : tab === 'meetings' ? (
         <MeetingsTab />
       ) : (

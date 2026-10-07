@@ -73,6 +73,81 @@ export const EditCompanyDetails: Story = {
   },
 };
 
+// Customizable company fields, from the company page: show all, add a
+// multiple-choice field, fill it in, and hide a field.
+export const EditFieldsOnCompanyPage: Story = {
+  args: {initialRoute: 'companies/strategio'},
+  play: async ({canvas, canvasElement, userEvent}) => {
+    const body = within(canvasElement.ownerDocument.body);
+    const details = await canvas.findByRole('region', {name: 'Company details'});
+    // Seven fields: six shown until "Show all fields".
+    await expect(within(details).queryByText('Renewal date')).toBeNull();
+    await userEvent.click(within(details).getByRole('button', {name: 'Show all fields (7)'}));
+    await expect(within(details).getByText('Renewal date')).toBeVisible();
+
+    await userEvent.click(canvas.getByRole('button', {name: 'Edit fields'}));
+    const popover = await body.findByRole('dialog', {name: 'Company details fields'});
+    await userEvent.click(within(popover).getByRole('button', {name: 'Hide Industry'}));
+    await expect(within(details).queryByText('Industry')).toBeNull();
+
+    await userEvent.click(within(popover).getByRole('button', {name: 'Add field'}));
+    const dialog = await body.findByRole('dialog', {name: 'Add company field'});
+    await userEvent.type(within(dialog).getByLabelText('Field name'), 'Competitors');
+    await userEvent.click(within(dialog).getByRole('radio', {name: /Multiple choice/}));
+    await userEvent.type(within(dialog).getByRole('textbox', {name: 'Option 1'}), 'Gong{Enter}');
+    await userEvent.type(within(dialog).getByRole('textbox', {name: 'Option 2'}), 'Chorus');
+    await userEvent.click(within(dialog).getByRole('button', {name: 'Add field'}));
+    await waitFor(() => expect(body.queryByRole('dialog', {name: 'Add company field'})).toBeNull());
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(body.queryByRole('dialog', {name: 'Company details fields'})).toBeNull());
+
+    // The new field is on the page and takes several values.
+    await userEvent.click(within(details).getByRole('button', {name: 'Competitors: not set'}));
+    await userEvent.click(await body.findByRole('option', {name: 'Gong'}));
+    await userEvent.click(body.getByRole('option', {name: 'Chorus'}));
+    await expect(within(details).getByRole('button', {name: 'Competitors: Gong, Chorus'})).toBeVisible();
+  },
+};
+
+// Settings › Company fields: reorder, edit options, delete a custom field;
+// built-in fields can't be deleted.
+export const CompanyFieldsSettings: Story = {
+  args: {initialRoute: 'settings/company-fields'},
+  play: async ({canvas, canvasElement, userEvent}) => {
+    const body = within(canvasElement.ownerDocument.body);
+    const list = await canvas.findByRole('list', {name: 'Company fields'});
+    const names = () => within(list).getAllByRole('listitem').map(li => li.getAttribute('aria-label'));
+    await expect(names()).toEqual(['Location', 'Website', 'Employees', 'ICP fit', 'Industry', 'Account owner', 'Renewal date']);
+
+    await userEvent.click(canvas.getByRole('button', {name: 'More actions for Renewal date'}));
+    await userEvent.click(await body.findByRole('menuitem', {name: 'Move up'}));
+    await expect(names()[5]).toBe('Renewal date');
+
+    // Built-in: no Delete.
+    await userEvent.click(canvas.getByRole('button', {name: 'More actions for ICP fit'}));
+    await expect(body.queryByRole('menuitem', {name: 'Delete'})).toBeNull();
+    await userEvent.click(body.getByRole('menuitem', {name: 'Edit'}));
+    const edit = await body.findByRole('dialog', {name: 'Edit “ICP fit”'});
+    await userEvent.click(within(edit).getByRole('button', {name: 'Add option'}));
+    await userEvent.type(within(edit).getByRole('textbox', {name: 'Option 4'}), 'Partner');
+    await userEvent.click(within(edit).getByRole('button', {name: 'Save'}));
+    await expect(await within(list).findByText('Single choice · 4 options')).toBeVisible();
+
+    await userEvent.click(canvas.getByRole('button', {name: 'More actions for Industry'}));
+    await userEvent.click(await body.findByRole('menuitem', {name: 'Delete'}));
+    const confirm = await body.findByRole('dialog', {name: 'Delete “Industry”?'});
+    await userEvent.click(within(confirm).getByRole('button', {name: 'Delete field'}));
+    await waitFor(() => expect(names()).not.toContain('Industry'));
+
+    // Names must be unique.
+    await userEvent.click(canvas.getByRole('button', {name: 'Add field'}));
+    const add = await body.findByRole('dialog', {name: 'Add company field'});
+    await userEvent.type(within(add).getByLabelText('Field name'), 'website');
+    await userEvent.click(within(add).getByRole('button', {name: 'Add field'}));
+    await expect(within(add).getByText('Another field already has this name.')).toBeVisible();
+  },
+};
+
 export const CompanyMeetings: Story = {args: {initialRoute: 'companies/strategio/meetings'}};
 
 export const CompanyPeople: Story = {args: {initialRoute: 'companies/strategio/people'}};
