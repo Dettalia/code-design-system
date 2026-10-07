@@ -420,10 +420,21 @@ export function FlowShell({route, onNavigate, panelTop = 32, aside, children}: F
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: 3,
           }}
         >
-          {children}
+          {/* Page contents are at most 1024px wide, centered. */}
+          <Box
+            sx={{
+              width: '100%',
+              maxWidth: 1024,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 3,
+            }}
+          >
+            {children}
+          </Box>
         </Box>
         {aside && wide ? aside : null}
       </Box>
