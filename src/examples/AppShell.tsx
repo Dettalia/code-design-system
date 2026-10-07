@@ -5,6 +5,7 @@ import {
   Box,
   Button,
   Divider,
+  IconButton,
   InputAdornment,
   List,
   ListItemButton,
@@ -96,7 +97,8 @@ const Kbd = ({children}: {children: React.ReactNode}) => (
   </Box>
 );
 
-function TopNav() {
+/** Top nav. `onOpenMenu` adds a menu button before the logo (small screens, where the sidebar is a drawer). */
+export function TopNav({onOpenMenu}: {onOpenMenu?: () => void} = {}) {
   return (
     <AppBar
       position="static"
@@ -114,6 +116,15 @@ function TopNav() {
             minWidth: 0,
           }}
         >
+          {onOpenMenu ? (
+            <IconButton aria-label="Open menu" onClick={onOpenMenu} sx={{ml: -1, mr: -1}}>
+              <Box aria-hidden sx={{width: 20, display: 'grid', gap: '4px'}}>
+                {[0, 1, 2].map(i => (
+                  <Box key={i} sx={{height: '1.5px', borderRadius: 1, bgcolor: 'text.primary'}} />
+                ))}
+              </Box>
+            </IconButton>
+          ) : null}
           <BliroLogo />
           <OutlinedInput
             placeholder="Search..."
@@ -135,6 +146,8 @@ function TopNav() {
               </InputAdornment>
             }
             sx={theme => ({
+              // Not in Figma: on phones there's no room for search next to the logo and button.
+              display: {xs: 'none', sm: 'inline-flex'},
               flex: 1,
               maxWidth: 780,
               minWidth: 0,

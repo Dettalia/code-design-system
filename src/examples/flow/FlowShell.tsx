@@ -6,7 +6,6 @@ import {
   Collapse,
   Divider,
   Drawer,
-  IconButton,
   List,
   ListItemButton,
   ListItemIcon,
@@ -16,11 +15,11 @@ import {
   useMediaQuery,
   type Theme,
 } from '../../index';
-import {BliroLogo, VickyAvatar, hairline} from '../AppShell';
+import {TopNav, VickyAvatar, hairline} from '../AppShell';
 import avatarPeter from '../meetings-assets/avatar-peter.png';
 import chevronRight from '../meetings-assets/chevron-right.svg';
 import navCompanies from '../flow-assets/nav-companies.svg';
-import navContacts from '../flow-assets/nav-contacts.svg';
+import navPeople from '../flow-assets/nav-people.svg';
 import navGroups from '../flow-assets/nav-groups.svg';
 import navMeetings from '../flow-assets/nav-meetings.svg';
 import navSettings from '../flow-assets/nav-settings.svg';
@@ -37,9 +36,10 @@ import setTemplates from '../flow-assets/set-templates.svg';
 import setUsage from '../flow-assets/set-usage.svg';
 import setWebhooks from '../flow-assets/set-webhooks.svg';
 
-// The new Bliro Web app shell from Figma (Bliro Web app, section 8032:74222):
-// the sidebar holds the logo and navigation, and pages sit on a white rounded
-// panel. In Settings the sidebar becomes the settings menu.
+// The Bliro Web app shell from Figma (Bliro Web app, "Company overview"
+// 8117:120063): top nav (logo, search, Start bliro), a white sidebar with the
+// navigation, the page, and an optional panel on the right (Vicky). In
+// Settings the sidebar becomes the settings menu (section 8032:74222).
 
 const {color, radius} = tokens;
 
@@ -51,7 +51,7 @@ export type Route =
   | 'groups'
   | 'companies'
   | `companies/${string}`
-  | 'contacts'
+  | 'people'
   | 'team'
   | `settings/${SettingsPage}`;
 
@@ -85,7 +85,7 @@ const MAIN_TOP: NavSection[] = [
     collapsible: true,
     items: [
       {route: 'companies', label: 'Companies', icon: navCompanies},
-      {route: 'contacts', label: 'Contacts', icon: navContacts},
+      {route: 'people', label: 'People', icon: navPeople},
     ],
   },
 ];
@@ -269,14 +269,6 @@ function Section({
   );
 }
 
-function Logo() {
-  return (
-    <Box sx={{p: 1}}>
-      <BliroLogo />
-    </Box>
-  );
-}
-
 function ProfileRow({onNavigate}: {onNavigate: (r: Route) => void}) {
   return (
     <ListItemButton
@@ -307,7 +299,6 @@ function MainSidebar({current, onNavigate}: {current: Route; onNavigate: (r: Rou
   return (
     <>
       <Box sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
-        <Logo />
         {MAIN_TOP.map((section, i) => (
           <Section key={i} section={section} current={current} onNavigate={onNavigate} />
         ))}
@@ -326,7 +317,6 @@ function MainSidebar({current, onNavigate}: {current: Route; onNavigate: (r: Rou
 function SettingsSidebar({current, onNavigate}: {current: Route; onNavigate: (r: Route) => void}) {
   return (
     <Box sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
-      <Logo />
       <List disablePadding>
         <NavLink
           item={{route: 'meetings', label: 'Back to home', icon: setBack}}
@@ -355,10 +345,10 @@ function SettingsSidebar({current, onNavigate}: {current: Route; onNavigate: (r:
 export interface FlowShellProps {
   route: Route;
   onNavigate: (route: Route) => void;
-  /** Panel top padding: Figma uses 16px on My meetings and 24px elsewhere. */
+  /** Page top padding: Figma uses 16px on My meetings and 32px on the company page. */
   panelTop?: number;
   /**
-   * Second panel to the right of the page (e.g. the Vicky chat on a company
+   * Panel docked to the right of the page (e.g. the Vicky chat on a company
    * page). Shown from 1200px; below that it's hidden.
    */
   aside?: React.ReactNode;
@@ -367,11 +357,7 @@ export interface FlowShellProps {
 
 const SIDEBAR_WIDTH = 240;
 
-// App background behind the sidebar and panel. #fafafa (changed on request,
-// 2026-10-02; Figma uses #fffbfa). Neither is a design-system token.
-const APP_BACKGROUND = '#fafafa';
-
-export function FlowShell({route, onNavigate, panelTop = 24, aside, children}: FlowShellProps) {
+export function FlowShell({route, onNavigate, panelTop = 32, aside, children}: FlowShellProps) {
   const inSettings = route.startsWith('settings/');
   const desktop = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'), {noSsr: true});
   const wide = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'), {noSsr: true});
@@ -381,6 +367,7 @@ export function FlowShell({route, onNavigate, panelTop = 24, aside, children}: F
     onNavigate(next);
   };
 
+  // Figma "Bliro-menus": white, hairline on the right, padding 8 8 16 8.
   const sidebar = (
     <Box
       component={inSettings ? 'div' : 'nav'}
@@ -395,6 +382,8 @@ export function FlowShell({route, onNavigate, panelTop = 24, aside, children}: F
         px: 1,
         pb: 2,
         overflowY: 'auto',
+        bgcolor: 'background.paper',
+        borderRight: desktop ? hairline : 0,
       }}
     >
       {inSettings ? (
@@ -406,54 +395,35 @@ export function FlowShell({route, onNavigate, panelTop = 24, aside, children}: F
   );
 
   return (
-    <Box sx={{height: '100vh', display: 'flex', bgcolor: APP_BACKGROUND}}>
-      {desktop ? (
-        <Box sx={{flexShrink: 0}}>{sidebar}</Box>
-      ) : (
-        // Not in Figma: below 900px the sidebar opens as a drawer.
-        <Drawer
-          open={drawerOpen}
-          onClose={() => setDrawerOpen(false)}
-          slotProps={{paper: {sx: {bgcolor: APP_BACKGROUND}}}}
+    <Box sx={{height: '100vh', display: 'flex', flexDirection: 'column', bgcolor: 'background.paper'}}>
+      <TopNav onOpenMenu={desktop ? undefined : () => setDrawerOpen(true)} />
+      <Box sx={{flex: 1, minHeight: 0, display: 'flex'}}>
+        {desktop ? (
+          <Box sx={{flexShrink: 0}}>{sidebar}</Box>
+        ) : (
+          // Not in Figma: below 900px the sidebar opens as a drawer.
+          <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+            {sidebar}
+          </Drawer>
+        )}
+        {/* Figma "Page content": padding 32 40 40, 24px between sections. */}
+        <Box
+          component="main"
+          sx={{
+            flex: 1,
+            minWidth: 0,
+            overflowY: 'auto',
+            bgcolor: 'background.paper',
+            pt: `${panelTop}px`,
+            px: {xs: 2, md: 5},
+            pb: 5,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 3,
+          }}
         >
-          {sidebar}
-        </Drawer>
-      )}
-      <Box sx={{flex: 1, minWidth: 0, display: 'flex', p: 1, gap: 1}}>
-        <Box sx={{flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 1}}>
-          {desktop ? null : (
-            <Box sx={{display: 'flex', alignItems: 'center', gap: 1, px: 0.5}}>
-              <IconButton aria-label="Open menu" onClick={() => setDrawerOpen(true)}>
-                <Box aria-hidden sx={{width: 20, display: 'grid', gap: '4px'}}>
-                  {[0, 1, 2].map(i => (
-                    <Box key={i} sx={{height: '1.5px', borderRadius: 1, bgcolor: 'text.primary'}} />
-                  ))}
-                </Box>
-              </IconButton>
-              <BliroLogo />
-            </Box>
-          )}
-          <Box
-            component="main"
-            sx={{
-              flex: 1,
-              minHeight: 0,
-              overflowY: 'auto',
-              bgcolor: 'background.paper',
-              borderRadius: '24px',
-              // Figma: 0 0 2px rgba(0, 0, 0, 0.12).
-              boxShadow: '0 0 2px rgba(0, 0, 0, 0.12)',
-              pt: `${panelTop}px`,
-              px: {xs: 2, md: 5},
-              pb: 5,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: 3,
-            }}
-          >
-            {children}
-          </Box>
+          {children}
         </Box>
         {aside && wide ? aside : null}
       </Box>

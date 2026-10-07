@@ -137,7 +137,7 @@ export function FlowPrototype({initialRoute}: {initialRoute?: Route}) {
       <FlowShell
         route={route}
         onNavigate={navigate}
-        panelTop={route === 'meetings' ? 16 : 24}
+        panelTop={route === 'meetings' ? 16 : 32}
         aside={company ? <VickyChatPanel companyName={company.name} /> : undefined}
       >
         {page}

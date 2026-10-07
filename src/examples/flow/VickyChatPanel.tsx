@@ -40,11 +40,11 @@ type Message = {from: 'user' | 'vicky'; text: string};
 
 const Img = ({src}: {src: string}) => <Box component="img" src={src} alt="" sx={{display: 'block'}} />;
 
+// Docked to the right of the page with a hairline on its left (Figma 8117:120152).
 const panelSx = {
   flexShrink: 0,
   bgcolor: 'background.paper',
-  borderRadius: '24px',
-  boxShadow: '0 0 2px rgba(0, 0, 0, 0.12)',
+  borderLeft: `1px solid ${color.neutral['100']}`,
   overflow: 'hidden',
   display: 'flex',
   flexDirection: 'column',

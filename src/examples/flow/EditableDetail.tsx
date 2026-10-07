@@ -35,6 +35,23 @@ const fieldSx = {
 
 const activeSx = {borderColor: `${color.neutral['400']} !important`};
 
+// A 4px grey scrollbar thumb with no track. Chrome and Safari use the
+// ::-webkit-scrollbar rules; setting scrollbar-width there would disable them,
+// so the standard properties (Firefox, thin at its narrowest) apply only where
+// the WebKit ones aren't supported.
+const subtleScrollbarSx = {
+  '&::-webkit-scrollbar': {width: 4},
+  '&::-webkit-scrollbar-track': {background: 'transparent'},
+  '&::-webkit-scrollbar-thumb': {
+    background: color.neutral['200'],
+    borderRadius: `${radius.full}px`,
+  },
+  '@supports not selector(::-webkit-scrollbar)': {
+    scrollbarWidth: 'thin',
+    scrollbarColor: `${color.neutral['200']} transparent`,
+  },
+} as const;
+
 const Icon = ({src}: {src: string}) => (
   <Box component="img" src={src} alt="" sx={{display: 'block', flexShrink: 0}} />
 );
@@ -181,9 +198,8 @@ export function EditableSelect({label, value, options, placeholder, onSave}: Edi
           <Paper
             sx={{
               mt: 0.5,
-              width: 216,
-              maxHeight: 232,
-              overflowY: 'auto',
+              // As wide as the field it opens from.
+              width: anchor?.offsetWidth,
               p: 1,
               borderRadius: `${radius['2xl']}px`,
               boxShadow: shadow.modal,
@@ -197,7 +213,15 @@ export function EditableSelect({label, value, options, placeholder, onSave}: Edi
               onKeyDown={event => {
                 if (event.key === 'Escape' || event.key === 'Tab') close();
               }}
-              sx={{p: 0, display: 'flex', flexDirection: 'column', gap: 0.5}}
+              sx={{
+                p: 0,
+                maxHeight: 216,
+                overflowY: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 0.5,
+                ...subtleScrollbarSx,
+              }}
             >
               {options.map(option => (
                 <MenuItem

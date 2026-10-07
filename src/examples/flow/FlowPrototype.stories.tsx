@@ -14,12 +14,10 @@ type Story = StoryObj<typeof meta>;
 
 export const Meetings: Story = {
   play: async ({canvas}) => {
-    // App background behind the sidebar and the white panel: #fafafa.
-    const panel = canvas.getByRole('main');
-    let app = panel.parentElement!;
-    while (getComputedStyle(app).backgroundColor === 'rgba(0, 0, 0, 0)') app = app.parentElement!;
-    await expect(getComputedStyle(app).backgroundColor).toBe('rgb(250, 250, 250)');
-    await expect(getComputedStyle(panel).backgroundColor).toBe('rgb(255, 255, 255)');
+    // Figma 8117:120063 layout: top nav with search, white sidebar and page.
+    await expect(canvas.getByRole('textbox', {name: 'Search'})).toBeVisible();
+    await expect(canvas.getByRole('button', {name: 'Start bliro'})).toBeVisible();
+    await expect(getComputedStyle(canvas.getByRole('main')).backgroundColor).toBe('rgb(255, 255, 255)');
   },
 };
 
@@ -50,8 +48,13 @@ export const EditCompanyDetails: Story = {
     await userEvent.type(employees, '9{Escape}');
     await expect(employees).toHaveValue('2.500+');
 
-    await userEvent.click(canvas.getByRole('button', {name: 'Location: Germany'}));
-    await userEvent.click(await body.findByRole('option', {name: 'Romania'}));
+    const location = canvas.getByRole('button', {name: 'Location: Germany'});
+    await userEvent.click(location);
+    // The menu is as wide as the field.
+    const menu = await body.findByRole('listbox', {name: 'Location'});
+    const fieldWidth = location.parentElement!.getBoundingClientRect().width;
+    await expect(menu.parentElement!.getBoundingClientRect().width).toBeCloseTo(fieldWidth, 0);
+    await userEvent.click(body.getByRole('option', {name: 'Romania'}));
     await expect(canvas.getByRole('button', {name: 'Location: Romania'})).toBeVisible();
     await waitFor(() => expect(body.queryByRole('listbox')).toBeNull());
 
@@ -170,7 +173,8 @@ export const ClickThrough: Story = {
 // Sidebar sections without a design yet open a placeholder.
 export const NotDesignedPage: Story = {
   play: async ({canvas, userEvent}) => {
-    await userEvent.click(canvas.getByRole('link', {name: 'Contacts'}));
+    const main = canvas.getByRole('navigation', {name: 'Main'});
+    await userEvent.click(within(main).getByRole('link', {name: 'People'}));
     await expect(await canvas.findByText("This page isn't designed yet")).toBeVisible();
   },
 };
