@@ -359,6 +359,12 @@ export interface FlowShellProps {
 
 const SIDEBAR_WIDTH = 240;
 
+/** Scrolls without showing a scrollbar (requested for the page; wheel, touch and keys still scroll). */
+export const hiddenScrollbarSx = {
+  scrollbarWidth: 'none',
+  '&::-webkit-scrollbar': {display: 'none'},
+} as const;
+
 export function FlowShell({route, onNavigate, panelTop = 32, aside, children}: FlowShellProps) {
   const inSettings = route.startsWith('settings/');
   const desktop = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'), {noSsr: true});
@@ -384,6 +390,7 @@ export function FlowShell({route, onNavigate, panelTop = 32, aside, children}: F
         px: 1,
         pb: 2,
         overflowY: 'auto',
+        ...hiddenScrollbarSx,
         bgcolor: 'background.paper',
         borderRight: desktop ? hairline : 0,
       }}
@@ -415,6 +422,7 @@ export function FlowShell({route, onNavigate, panelTop = 32, aside, children}: F
             flex: 1,
             minWidth: 0,
             overflowY: 'auto',
+            ...hiddenScrollbarSx,
             bgcolor: 'background.paper',
             pt: `${panelTop}px`,
             px: {xs: 2, md: 5},

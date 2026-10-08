@@ -21,6 +21,7 @@ import panelClose from '../company-assets/panel-close.svg';
 import panelOpen from '../company-assets/panel-open.svg';
 import sparkles20 from '../company-assets/sparkles-20.svg';
 import sparkles40 from '../company-assets/sparkles-40.svg';
+import {hiddenScrollbarSx} from './FlowShell';
 
 // "Ask Vicky" chat window from Figma (Bliro Web app, component "Chat window"
 // 7783:109597, used on the company detail page 8032:74223). Open: 420px panel;
@@ -121,6 +122,7 @@ export function VickyChatPanel({companyName}: {companyName: string}) {
           flex: 1,
           minHeight: 0,
           overflowY: 'auto',
+          ...hiddenScrollbarSx,
           px: 2,
           pt: 2,
           display: 'flex',

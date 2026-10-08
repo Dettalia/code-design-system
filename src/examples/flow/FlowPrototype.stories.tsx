@@ -17,7 +17,12 @@ export const Meetings: Story = {
     // Figma 8117:120063 layout: top nav with search, white sidebar and page.
     await expect(canvas.getByRole('textbox', {name: 'Search'})).toBeVisible();
     await expect(canvas.getByRole('button', {name: 'Start bliro'})).toBeVisible();
-    await expect(getComputedStyle(canvas.getByRole('main')).backgroundColor).toBe('rgb(255, 255, 255)');
+    const main = canvas.getByRole('main');
+    await expect(getComputedStyle(main).backgroundColor).toBe('rgb(255, 255, 255)');
+    // The page scrolls, without a visible scrollbar.
+    await expect(getComputedStyle(main).overflowY).toBe('auto');
+    await expect(getComputedStyle(main).scrollbarWidth).toBe('none');
+    await expect(main.offsetWidth - main.clientWidth).toBe(0);
   },
 };
 
