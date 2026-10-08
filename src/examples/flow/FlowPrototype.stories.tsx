@@ -26,6 +26,15 @@ export const Companies: Story = {args: {initialRoute: 'companies'}};
 // Company detail page (Figma 8032:74223) with the Ask Vicky panel beside it.
 export const CompanyDetail: Story = {
   args: {initialRoute: 'companies/strategio'},
+  play: async ({canvas}) => {
+    // 8px between tab items.
+    const [overview, meetings] = await Promise.all([
+      canvas.findByRole('tab', {name: 'Overview'}),
+      canvas.findByRole('tab', {name: 'Meetings'}),
+    ]);
+    const gap = meetings.getBoundingClientRect().left - overview.getBoundingClientRect().right;
+    await expect(Math.round(gap)).toBe(8);
+  },
 };
 
 // Editing company details in place (Figma 8117:120063): text fields save on

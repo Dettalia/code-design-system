@@ -271,7 +271,7 @@ export function CompanyDetailPage({company, tab, onTab, onBack, details, onNotDe
         onChange={(_, value: CompanyTab) => onTab(value)}
         aria-label={`${company.name} sections`}
         slotProps={{indicator: {sx: {height: 3, borderRadius: '8px 8px 0 0', bgcolor: color.button.primary.main}}}}
-        sx={{minHeight: 0, borderBottom: hairline, '& .MuiTabs-flexContainer': {gap: 2}}}
+        sx={{minHeight: 0, borderBottom: hairline, '& .MuiTabs-flexContainer': {gap: 1}}}
       >
         {TABS.map(t => (
           <Tab
