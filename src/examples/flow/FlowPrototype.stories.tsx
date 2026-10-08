@@ -211,7 +211,17 @@ export const VickyChat: Story = {
   },
 };
 
-export const MyAccount: Story = {args: {initialRoute: 'settings/account'}};
+export const MyAccount: Story = {
+  args: {initialRoute: 'settings/account'},
+  play: async ({canvas}) => {
+    // Settings menu categories (Figma 8097:115318): 13px labels, not collapsible.
+    const nav = within(await canvas.findByRole('navigation', {name: 'Settings'}));
+    for (const label of ['Meetings', 'Organization', 'Connections', 'Developers']) {
+      await expect(nav.queryByRole('button', {name: label})).toBeNull();
+      await expect(getComputedStyle(nav.getByText(label)).fontSize).toBe('13px');
+    }
+  },
+};
 
 // The Figma flow: Meetings -> Companies -> Settings / My account -> Back to home.
 export const ClickThrough: Story = {

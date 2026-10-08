@@ -104,7 +104,6 @@ const SETTINGS: NavSection[] = [
   {items: [{route: 'settings/account', label: 'My account', icon: setMyAccount}]},
   {
     label: 'Meetings',
-    collapsible: true,
     items: [
       {route: 'settings/templates', label: 'Templates', icon: setTemplates},
       {route: 'settings/dictionary', label: 'Dictionary', icon: setDictionary},
@@ -113,7 +112,6 @@ const SETTINGS: NavSection[] = [
   },
   {
     label: 'Organization',
-    collapsible: true,
     items: [
       // Same Figma icons as Companies and Team.
       {route: 'settings/general', label: 'General', icon: navCompanies},
@@ -126,12 +124,10 @@ const SETTINGS: NavSection[] = [
   },
   {
     label: 'Connections',
-    collapsible: true,
     items: [{route: 'settings/integrations', label: 'Integrations', icon: setIntegrations}],
   },
   {
     label: 'Developers',
-    collapsible: true,
     items: [
       {route: 'settings/api-access', label: 'API Access', icon: setApiAccess},
       {route: 'settings/webhooks', label: 'Webhook Management', icon: setWebhooks},
@@ -230,10 +226,13 @@ function Section({
   section,
   current,
   onNavigate,
+  compact,
 }: {
   section: NavSection;
   current: Route;
   onNavigate: (r: Route) => void;
+  /** Settings menu labels (Figma 8097:115318): Body/XSmall/Regular, 24px tall. */
+  compact?: boolean;
 }) {
   const [open, setOpen] = useState(true);
   const items = (
@@ -261,7 +260,14 @@ function Section({
             {section.label}
           </ButtonBase>
         ) : (
-          <Typography component="div" sx={{...sectionLabelSx, alignItems: 'center'}}>
+          <Typography
+            component="div"
+            sx={{
+              ...sectionLabelSx,
+              alignItems: 'center',
+              ...(compact ? {height: 24, typography: 'bodyXsmallRegular'} : {}),
+            }}
+          >
             {section.label}
           </Typography>
         )
@@ -333,9 +339,9 @@ function SettingsSidebar({current, onNavigate}: {current: Route; onNavigate: (r:
       >
         Settings
       </Typography>
-      <Box component="nav" aria-label="Settings" sx={{display: 'flex', flexDirection: 'column'}}>
+      <Box component="nav" aria-label="Settings" sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
         {SETTINGS.map((section, i) => (
-          <Section key={i} section={section} current={current} onNavigate={onNavigate} />
+          <Section key={i} section={section} current={current} onNavigate={onNavigate} compact />
         ))}
       </Box>
     </Box>
