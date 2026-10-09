@@ -27,6 +27,7 @@ import pencilIcon from '../fields-assets/pencil-16.svg';
 import trashIcon from '../fields-assets/trash-16.svg';
 import {FieldDialog} from './FieldDialog';
 import {MaskIcon} from './FlowShell';
+import {SettingsPage} from './settings/SettingsLayout';
 import {
   fieldIcon,
   fieldTypeInfo,
@@ -108,17 +109,10 @@ export function CompanyFieldsPage({fields, onChange}: CompanyFieldsPageProps) {
   const shown = fields.filter(f => !f.hidden).length;
 
   return (
-    <>
-      <Box sx={{width: '100%', display: 'flex', alignItems: 'flex-start', gap: 2, flexWrap: 'wrap'}}>
-        <Box sx={{flex: 1, minWidth: 240}}>
-          <Typography variant="h5" component="h1">
-            Company fields
-          </Typography>
-          <Typography variant="bodySmallRegular" color="textSecondary" component="p" sx={{mt: 1, maxWidth: 560}}>
-            Choose what your team sees and edits about every company. Changes apply to all companies in
-            your organization.
-          </Typography>
-        </Box>
+    <SettingsPage
+      title="Company fields"
+      description="Choose what your team sees and edits about every company. Changes apply to all companies in your organization."
+      actions={
         <Button
           variant="contained"
           startIcon={<MaskIcon src={plusIcon} color="primary.contrastText" />}
@@ -126,8 +120,8 @@ export function CompanyFieldsPage({fields, onChange}: CompanyFieldsPageProps) {
         >
           Add field
         </Button>
-      </Box>
-
+      }
+    >
       <Box sx={{width: '100%', display: 'flex', flexDirection: 'column', gap: 1}}>
         <Typography variant="bodySmallMedium" color="textSecondary" component="h2">
           {fields.length} fields · {shown} shown on company pages
@@ -303,7 +297,7 @@ export function CompanyFieldsPage({fields, onChange}: CompanyFieldsPageProps) {
           </Button>
         </DialogActions>
       </Dialog>
-    </>
+    </SettingsPage>
   );
 }
 

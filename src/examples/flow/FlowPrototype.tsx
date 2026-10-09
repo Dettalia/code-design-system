@@ -2,11 +2,14 @@ import React, {useEffect, useState} from 'react';
 import {Box, Button, Snackbar, Typography} from '../../index';
 import {COMPANIES, CompaniesContent, type Company} from '../CompaniesPage';
 import {MeetingsContent} from '../MeetingsPage';
-import {FlowShell, ROUTE_LABELS, type Route} from './FlowShell';
+import {FlowShell, ROUTE_LABELS, type Route, type SettingsPage} from './FlowShell';
 import {CompanyDetailPage, type CompanyTab} from './CompanyDetailPage';
 import {CompanyFieldsPage} from './CompanyFieldsPage';
 import {CUSTOM_VALUES, DEFAULT_FIELDS, type CompanyField, type FieldValue} from './companyFields';
-import {MyAccountPage} from './MyAccountPage';
+import {ApiAccessSettings, DictionarySettings, MembersSettings, WebhooksSettings} from './settings/CollectionSettings';
+import {AccountSettings, GeneralSettings} from './settings/FormSettings';
+import {IntegrationsSettings, SkillsSettings, TemplatesSettings, UsageSettings} from './settings/ListDetailSettings';
+import {SettingsPlaceholder} from './settings/SettingsPlaceholder';
 import {VickyChatPanel} from './VickyChatPanel';
 
 // Clickable prototype of the Figma flow "Section 3" (Bliro Web app,
@@ -70,6 +73,39 @@ function NotDesigned({route, onNavigate}: {route: Route; onNavigate: (r: Route) 
       </Box>
     </Box>
   );
+}
+
+// Settings pages, by template (see settings/SettingsLayout.tsx).
+const LIST_DETAIL: Route[] = ['settings/templates', 'settings/skills', 'settings/integrations'];
+
+function settingsPage(
+  page: SettingsPage,
+  {onSaved, onMessage, onDeleteAccount}: {onSaved: () => void; onMessage: (m: string) => void; onDeleteAccount: () => void},
+): React.ReactNode {
+  switch (page) {
+    case 'account':
+      return <AccountSettings onSaved={onSaved} onDeleteAccount={onDeleteAccount} />;
+    case 'general':
+      return <GeneralSettings onSaved={onSaved} />;
+    case 'members':
+      return <MembersSettings onMessage={onMessage} />;
+    case 'dictionary':
+      return <DictionarySettings />;
+    case 'api-access':
+      return <ApiAccessSettings onMessage={onMessage} />;
+    case 'webhooks':
+      return <WebhooksSettings onMessage={onMessage} />;
+    case 'usage':
+      return <UsageSettings onMessage={onMessage} />;
+    case 'templates':
+      return <TemplatesSettings onMessage={onMessage} />;
+    case 'skills':
+      return <SkillsSettings onMessage={onMessage} />;
+    case 'integrations':
+      return <IntegrationsSettings onMessage={onMessage} />;
+    default:
+      return <SettingsPlaceholder title={ROUTE_LABELS[`settings/${page}`]} />;
+  }
 }
 
 export function FlowPrototype({initialRoute}: {initialRoute?: Route}) {
@@ -141,15 +177,12 @@ export function FlowPrototype({initialRoute}: {initialRoute?: Route}) {
     );
   else if (route === 'settings/company-fields')
     page = <CompanyFieldsPage fields={fields} onChange={setFields} />;
-  else if (route === 'settings/account')
-    page = (
-      <MyAccountPage
-        onSaved={() => setMessage('Changes saved')}
-        onDeleteAccount={() =>
-          setMessage('Account deletion requested (prototype: nothing was deleted)')
-        }
-      />
-    );
+  else if (route.startsWith('settings/'))
+    page = settingsPage(route.slice('settings/'.length) as SettingsPage, {
+      onSaved: () => setMessage('Changes saved'),
+      onMessage: setMessage,
+      onDeleteAccount: () => setMessage('Account deletion requested (prototype: nothing was deleted)'),
+    });
   else page = <NotDesigned route={route} onNavigate={navigate} />;
 
   return (
@@ -158,6 +191,7 @@ export function FlowPrototype({initialRoute}: {initialRoute?: Route}) {
         route={route}
         onNavigate={navigate}
         panelTop={route === 'meetings' ? 16 : 32}
+        bleed={LIST_DETAIL.includes(route)}
         aside={company ? <VickyChatPanel companyName={company.name} /> : undefined}
       >
         {page}

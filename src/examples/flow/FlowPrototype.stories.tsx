@@ -229,7 +229,7 @@ export const MyAccount: Story = {
   },
 };
 
-// The Figma flow: Meetings -> Companies -> Settings / My account -> Back to home.
+// The Figma flow: Meetings -> Companies -> Settings / My account -> Back to app.
 export const ClickThrough: Story = {
   play: async ({canvas, canvasElement, userEvent}) => {
     const main = canvas.getByRole('navigation', {name: 'Main'});
@@ -242,7 +242,7 @@ export const ClickThrough: Story = {
     await expect(await canvas.findByRole('heading', {level: 1, name: 'Companies'})).toBeVisible();
 
     await userEvent.click(within(main).getByRole('link', {name: 'Settings'}));
-    await expect(await canvas.findByRole('heading', {level: 1, name: 'My Account'})).toBeVisible();
+    await expect(await canvas.findByRole('heading', {level: 1, name: 'My account'})).toBeVisible();
     const settings = canvas.getByRole('navigation', {name: 'Settings'});
     await expect(within(settings).getByRole('link', {name: 'My account'})).toHaveAttribute(
       'aria-current',
@@ -252,7 +252,7 @@ export const ClickThrough: Story = {
     // Save is enabled only after a change; saving shows a confirmation.
     const save = canvas.getByRole('button', {name: 'Save'});
     await expect(save).toBeDisabled();
-    const firstName = canvas.getByLabelText('First Name');
+    const firstName = canvas.getByLabelText('First name');
     await userEvent.clear(firstName);
     await userEvent.type(firstName, 'Pete');
     await expect(save).toBeEnabled();
@@ -270,10 +270,62 @@ export const ClickThrough: Story = {
     await userEvent.click(within(dialog).getByRole('button', {name: 'Cancel'}));
     await waitFor(() => expect(body.queryByRole('dialog')).toBeNull());
 
-    await userEvent.click(canvas.getByRole('link', {name: 'Back to home'}));
+    await userEvent.click(canvas.getByRole('link', {name: 'Back to app'}));
     await expect(await canvas.findByRole('heading', {level: 1, name: 'My meetings'})).toBeVisible();
   },
 };
+
+// Settings templates (settings/SettingsLayout.tsx): Form, Collection, List–detail.
+export const SettingsFormTemplate: Story = {
+  args: {initialRoute: 'settings/general'},
+  play: async ({canvas, userEvent}) => {
+    await expect(await canvas.findByRole('heading', {level: 1, name: 'Organization'})).toBeVisible();
+    for (const title of ['General', 'Summary', 'Desktop app', 'Privacy']) {
+      await expect(canvas.getByRole('heading', {level: 2, name: title})).toBeVisible();
+    }
+    const save = canvas.getByRole('button', {name: 'Save'});
+    await expect(save).toBeDisabled();
+    // A dependent setting appears under its row.
+    await expect(canvas.getByRole('textbox', {name: 'Days before deletion'})).toBeVisible();
+    await userEvent.click(canvas.getByRole('button', {name: 'Never'}));
+    await expect(canvas.queryByRole('textbox', {name: 'Days before deletion'})).toBeNull();
+    await expect(save).toBeEnabled();
+    await userEvent.click(canvas.getByRole('button', {name: 'Cancel'}));
+    await expect(save).toBeDisabled();
+  },
+};
+
+export const SettingsCollectionTemplate: Story = {
+  args: {initialRoute: 'settings/api-access'},
+  play: async ({canvas, canvasElement, userEvent}) => {
+    const body = within(canvasElement.ownerDocument.body);
+    await expect(await canvas.findByText('No API keys yet')).toBeVisible();
+    await userEvent.click(canvas.getByRole('button', {name: 'Create API key'}));
+    const dialog = await body.findByRole('dialog', {name: 'Create API key'});
+    await userEvent.type(within(dialog).getByLabelText('Name'), 'Data warehouse sync');
+    await userEvent.click(within(dialog).getByRole('button', {name: 'Create key'}));
+    const table = await canvas.findByRole('table', {name: 'API keys'});
+    await expect(within(table).getByText('Data warehouse sync')).toBeVisible();
+    // With keys, the primary action moves to the page header.
+    await expect(canvas.getByRole('button', {name: 'Create API key'})).toBeVisible();
+  },
+};
+
+export const SettingsListDetailTemplate: Story = {
+  args: {initialRoute: 'settings/integrations'},
+  play: async ({canvas, userEvent}) => {
+    await expect(await canvas.findByRole('heading', {level: 2, name: 'Microsoft Dynamics'})).toBeVisible();
+    await userEvent.click(canvas.getByRole('button', {name: /HubSpot/}));
+    await expect(canvas.getByRole('heading', {level: 2, name: 'HubSpot'})).toBeVisible();
+    await userEvent.click(canvas.getByRole('button', {name: 'Connect'}));
+    await expect(canvas.getByRole('button', {name: 'Disconnect'})).toBeVisible();
+    await expect(canvas.getByRole('heading', {level: 2, name: 'Tools & permissions'})).toBeVisible();
+  },
+};
+
+export const SettingsSkills: Story = {args: {initialRoute: 'settings/skills'}};
+export const SettingsMembers: Story = {args: {initialRoute: 'settings/members'}};
+export const SettingsUsage: Story = {args: {initialRoute: 'settings/usage'}};
 
 // Sidebar sections without a design yet open a placeholder.
 export const NotDesignedPage: Story = {

@@ -294,13 +294,13 @@ function SettingsSidebar({current, onNavigate}: {current: Route; onNavigate: (r:
     <Box sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
       <List disablePadding>
         <NavLink
-          item={{route: 'meetings', label: 'Back to home', icon: setBack}}
+          item={{route: 'meetings', label: 'Back to app', icon: setBack}}
           active={false}
           onNavigate={onNavigate}
         />
       </List>
       <Typography
-        variant="h6"
+        variant="subheadingSubheading3"
         component="p"
         sx={{px: 1, height: 36, display: 'flex', alignItems: 'center'}}
       >
@@ -327,6 +327,11 @@ export interface FlowShellProps {
    * page). Shown from 1200px; below that it's hidden.
    */
   aside?: React.ReactNode;
+  /**
+   * Edge-to-edge page (no padding or 1024px cap), for layouts that bring
+   * their own panes, like the settings list–detail pages.
+   */
+  bleed?: boolean;
   children: React.ReactNode;
 }
 
@@ -338,7 +343,7 @@ export const hiddenScrollbarSx = {
   '&::-webkit-scrollbar': {display: 'none'},
 } as const;
 
-export function FlowShell({route, onNavigate, panelTop = 32, aside, children}: FlowShellProps) {
+export function FlowShell({route, onNavigate, panelTop = 32, aside, bleed, children}: FlowShellProps) {
   const inSettings = route.startsWith('settings/');
   const desktop = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'), {noSsr: true});
   const wide = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'), {noSsr: true});
@@ -394,12 +399,12 @@ export function FlowShell({route, onNavigate, panelTop = 32, aside, children}: F
           sx={{
             flex: 1,
             minWidth: 0,
-            overflowY: 'auto',
+            overflowY: bleed ? 'hidden' : 'auto',
             ...hiddenScrollbarSx,
             bgcolor: 'background.paper',
-            pt: `${panelTop}px`,
-            px: {xs: 2, md: 5},
-            pb: 5,
+            pt: bleed ? 0 : `${panelTop}px`,
+            px: bleed ? 0 : {xs: 2, md: 5},
+            pb: bleed ? 0 : 5,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -409,11 +414,12 @@ export function FlowShell({route, onNavigate, panelTop = 32, aside, children}: F
           <Box
             sx={{
               width: '100%',
-              maxWidth: 1024,
+              maxWidth: bleed ? 'none' : 1024,
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'center',
+              alignItems: bleed ? 'stretch' : 'center',
               gap: 3,
+              ...(bleed ? {flex: 1, minHeight: 0} : {}),
             }}
           >
             {children}

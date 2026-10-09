@@ -7,6 +7,7 @@ import {
   MuiDialogContentText,
   MuiDialogTitle,
 } from './components/dialog';
+import {MuiSwitch} from './components/switch';
 import {themeOptions, tokens} from './tokens';
 
 // Bliro defaults for MUI components, on top of the token-derived palette,
@@ -54,6 +55,7 @@ const components: ThemeOptions['components'] = {
   MuiDialogContent,
   MuiDialogContentText,
   MuiDialogActions,
+  MuiSwitch,
 };
 
 export const theme = createTheme({...themeOptions, components});
