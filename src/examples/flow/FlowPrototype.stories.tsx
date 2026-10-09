@@ -295,6 +295,28 @@ export const SettingsFormTemplate: Story = {
   },
 };
 
+// The three Figma explorations (8183:146430) as section styles, on General.
+export const SettingsStyleA: Story = {args: {initialRoute: 'settings/general', initialSectionStyle: 'banded'}};
+export const SettingsStyleB: Story = {args: {initialRoute: 'settings/general', initialSectionStyle: 'card'}};
+export const SettingsStyleC: Story = {args: {initialRoute: 'settings/general', initialSectionStyle: 'flat'}};
+
+export const CompareSectionStyles: Story = {
+  args: {initialRoute: 'settings/general', initialSectionStyle: 'card'},
+  play: async ({canvas, userEvent}) => {
+    const switcher = within(await canvas.findByRole('region', {name: 'Compare section styles'}));
+    const general = canvas.getByRole('region', {name: 'General'});
+    // B: bordered card.
+    await expect(getComputedStyle(general.lastElementChild!).borderTopWidth).toBe('1px');
+    await userEvent.click(switcher.getByRole('button', {name: 'A'}));
+    // A: the section itself is the grey band.
+    await expect(getComputedStyle(canvas.getByRole('region', {name: 'General'})).backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
+    await userEvent.click(switcher.getByRole('button', {name: 'C'}));
+    // C: dividers between sections instead of cards.
+    await expect(getComputedStyle(canvas.getByRole('region', {name: 'Summary'})).borderTopWidth).toBe('1px');
+    await expect(switcher.getByText('Flat rows (8153:92096)')).toBeVisible();
+  },
+};
+
 export const SettingsCollectionTemplate: Story = {
   args: {initialRoute: 'settings/api-access'},
   play: async ({canvas, canvasElement, userEvent}) => {

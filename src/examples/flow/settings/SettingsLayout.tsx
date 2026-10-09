@@ -24,6 +24,16 @@ const {color, radius} = tokens;
 export const hairline = `1px solid ${color.neutral['100']}`;
 export const CONTENT_WIDTH = 880;
 
+/**
+ * How Form sections are drawn, one per Figma exploration (section 8183:146430):
+ *   banded  A (8145:86593)  grey band with the section name, rows on a white panel
+ *   card    B (8153:91545)  title above a bordered card, dividers between rows (default)
+ *   flat    C (8153:92096)  title above flat rows, dividers between sections only
+ * Pages don't change; only SettingsSection and SettingsPage read it.
+ */
+export type SectionStyle = 'banded' | 'card' | 'flat';
+export const SectionStyleContext = React.createContext<SectionStyle>('card');
+
 export const Icon = ({src, size}: {src: string; size?: number}) => (
   <Box component="img" src={src} alt="" sx={{display: 'block', flexShrink: 0, ...(size ? {width: size, height: size} : {})}} />
 );
@@ -59,8 +69,19 @@ export interface SettingsPageProps {
 
 /** Page header + sections, 880px wide and centered (Form and Collection templates). */
 export function SettingsPage({title, description, helpHref, actions, children}: SettingsPageProps) {
+  const style = React.useContext(SectionStyleContext);
   return (
-    <Box sx={{width: '100%', maxWidth: CONTENT_WIDTH, display: 'flex', flexDirection: 'column', gap: 4}}>
+    <Box
+      sx={{
+        width: '100%',
+        maxWidth: CONTENT_WIDTH,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 4,
+        // C: sections are separated by a divider instead of cards.
+        ...(style === 'flat' ? {'& > section ~ section': {borderTop: hairline, pt: 3}} : {}),
+      }}
+    >
       <Box sx={{display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 2, flexWrap: 'wrap'}}>
         <Box sx={{minWidth: 0, flex: '1 1 320px'}}>
           <Typography variant="h5" component="h1">
@@ -101,8 +122,36 @@ export interface SettingsSectionProps {
 }
 
 export function SettingsSection({title, description, action, card = true, children}: SettingsSectionProps) {
+  const style = React.useContext(SectionStyleContext);
+
+  // A: the section is a grey band holding its name, with the rows on a white panel.
+  if (style === 'banded' && card) {
+    return (
+      <Box component="section" aria-label={title} sx={{bgcolor: color.neutral['50'], borderRadius: `${radius['2xl']}px`, p: 0.5}}>
+        {title || action ? (
+          <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2, px: 1.5, py: 0.75, minHeight: 32}}>
+            <Box>
+              {title ? (
+                <Typography variant="bodySmallRegular" color="textSecondary" component="h2">
+                  {title}
+                </Typography>
+              ) : null}
+              {description ? (
+                <Typography variant="bodyXsmallRegular" color="textSecondary" component="p">
+                  {description}
+                </Typography>
+              ) : null}
+            </Box>
+            {action}
+          </Box>
+        ) : null}
+        <Box sx={{bgcolor: 'background.paper', borderRadius: `${radius.xl}px`, boxShadow: `0 0 0 1px ${color.neutral['100']}`, px: 1.5, py: 0.5}}>{children}</Box>
+      </Box>
+    );
+  }
+
   return (
-    <Box component="section" aria-label={title} sx={{display: 'flex', flexDirection: 'column', gap: 1.5}}>
+    <Box component="section" aria-label={title} sx={{display: 'flex', flexDirection: 'column', gap: style === 'flat' ? 0.5 : 1.5}}>
       {title || action ? (
         <Box sx={{display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 2, minHeight: 32}}>
           <Box>
@@ -120,18 +169,12 @@ export function SettingsSection({title, description, action, card = true, childr
           {action}
         </Box>
       ) : null}
-      {card ? (
-        <Box
-          sx={{
-            border: hairline,
-            borderRadius: `${radius['2xl']}px`,
-            px: 2,
-            // One setting per row, separated by dividers.
-            '& > * + *': {borderTop: hairline},
-          }}
-        >
-          {children}
-        </Box>
+      {card && style === 'card' ? (
+        // B: bordered card, one setting per row, separated by dividers.
+        <Box sx={{border: hairline, borderRadius: `${radius['2xl']}px`, px: 2, '& > * + *': {borderTop: hairline}}}>{children}</Box>
+      ) : card ? (
+        // C: flat rows, no card or row dividers.
+        <Box>{children}</Box>
       ) : (
         children
       )}

@@ -22,6 +22,19 @@ slots in without a new layout.
 - **Collections:** the primary action ("Invite people", "Add word") is in the page header; search sits on the section's right. An empty collection shows an `EmptyState` with the primary action inside it instead.
 - **List–detail:** the list pane has the title, description and icon actions (search, add); groups are labelled, not collapsible. The detail starts with `DetailHeader` (title, status toggle and actions on the right), then uses the same sections and rows as Form pages.
 
+## Section styles (Figma explorations)
+
+Form sections can be drawn three ways, one per exploration in Figma section
+8183:146430. Pages don't change; `SectionStyleContext` picks the style.
+
+| Style | Exploration | Looks like |
+| --- | --- | --- |
+| `banded` (A) | 8145:86593 | Grey band with the section name, rows on a white panel |
+| `card` (B, default) | 8153:91545 | Title above a bordered card, dividers between rows |
+| `flat` (C) | 8153:92096 | Title above flat rows, dividers between sections only |
+
+The prototype has a switcher at the bottom of the settings sidebar to compare them.
+
 ## Adding a page
 
 1. Pick the template from the table above.

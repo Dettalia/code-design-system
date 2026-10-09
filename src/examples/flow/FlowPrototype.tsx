@@ -6,10 +6,22 @@ import {FlowShell, ROUTE_LABELS, type Route, type SettingsPage} from './FlowShel
 import {CompanyDetailPage, type CompanyTab} from './CompanyDetailPage';
 import {CompanyFieldsPage} from './CompanyFieldsPage';
 import {CUSTOM_VALUES, DEFAULT_FIELDS, type CompanyField, type FieldValue} from './companyFields';
-import {ApiAccessSettings, DictionarySettings, MembersSettings, WebhooksSettings} from './settings/CollectionSettings';
+import {
+  ApiAccessSettings,
+  DictionarySettings,
+  MembersSettings,
+  WebhooksSettings,
+} from './settings/CollectionSettings';
 import {AccountSettings, GeneralSettings} from './settings/FormSettings';
-import {IntegrationsSettings, SkillsSettings, TemplatesSettings, UsageSettings} from './settings/ListDetailSettings';
+import {
+  IntegrationsSettings,
+  SkillsSettings,
+  TemplatesSettings,
+  UsageSettings,
+} from './settings/ListDetailSettings';
 import {SettingsPlaceholder} from './settings/SettingsPlaceholder';
+import {SectionStyleContext, type SectionStyle} from './settings/SettingsLayout';
+import {SectionStyleSwitcher, useSectionStyle} from './settings/SectionStyleSwitcher';
 import {VickyChatPanel} from './VickyChatPanel';
 
 // Clickable prototype of the Figma flow "Section 3" (Bliro Web app,
@@ -59,7 +71,8 @@ function NotDesigned({route, onNavigate}: {route: Route; onNavigate: (r: Route) 
           component="p"
           sx={{mt: 0.5, mb: 2}}
         >
-          The prototype covers Meetings, Companies, Settings › My account and Settings › Company fields.
+          The prototype covers Meetings, Companies, Settings › My account and Settings › Company
+          fields.
         </Typography>
         <Button
           variant="outlined"
@@ -80,7 +93,11 @@ const LIST_DETAIL: Route[] = ['settings/templates', 'settings/skills', 'settings
 
 function settingsPage(
   page: SettingsPage,
-  {onSaved, onMessage, onDeleteAccount}: {onSaved: () => void; onMessage: (m: string) => void; onDeleteAccount: () => void},
+  {
+    onSaved,
+    onMessage,
+    onDeleteAccount,
+  }: {onSaved: () => void; onMessage: (m: string) => void; onDeleteAccount: () => void},
 ): React.ReactNode {
   switch (page) {
     case 'account':
@@ -108,8 +125,15 @@ function settingsPage(
   }
 }
 
-export function FlowPrototype({initialRoute}: {initialRoute?: Route}) {
+export function FlowPrototype({
+  initialRoute,
+  initialSectionStyle,
+}: {
+  initialRoute?: Route;
+  initialSectionStyle?: SectionStyle;
+}) {
   const [route, setRoute] = useState<Route>(() => initialRoute ?? readRoute());
+  const [sectionStyle, setSectionStyle] = useSectionStyle(initialSectionStyle);
   const [message, setMessage] = useState<string | null>(null);
   // Companies added in the prototype aren't in COMPANIES; remember the ones opened.
   const [opened, setOpened] = useState<Company[]>([]);
@@ -156,7 +180,11 @@ export function FlowPrototype({initialRoute}: {initialRoute?: Route}) {
       <CompanyDetailPage
         company={company}
         tab={companyRoute.tab}
-        onTab={tab => navigate(tab === 'overview' ? `companies/${company.id}` : `companies/${company.id}/${tab}`)}
+        onTab={tab =>
+          navigate(
+            tab === 'overview' ? `companies/${company.id}` : `companies/${company.id}/${tab}`,
+          )
+        }
         onBack={() => navigate('companies')}
         details={{
           fields,
@@ -164,9 +192,15 @@ export function FlowPrototype({initialRoute}: {initialRoute?: Route}) {
           onEditValue: (field, value: FieldValue) => {
             if (field.builtIn) {
               const key = field.builtIn;
-              setEdits(all => ({...all, [company.id]: {...all[company.id], [key]: value as string}}));
+              setEdits(all => ({
+                ...all,
+                [company.id]: {...all[company.id], [key]: value as string},
+              }));
             } else {
-              setCustomValues(all => ({...all, [company.id]: {...all[company.id], [field.id]: value}}));
+              setCustomValues(all => ({
+                ...all,
+                [company.id]: {...all[company.id], [field.id]: value},
+              }));
             }
           },
           onFieldsChange: setFields,
@@ -181,21 +215,27 @@ export function FlowPrototype({initialRoute}: {initialRoute?: Route}) {
     page = settingsPage(route.slice('settings/'.length) as SettingsPage, {
       onSaved: () => setMessage('Changes saved'),
       onMessage: setMessage,
-      onDeleteAccount: () => setMessage('Account deletion requested (prototype: nothing was deleted)'),
+      onDeleteAccount: () =>
+        setMessage('Account deletion requested (prototype: nothing was deleted)'),
     });
   else page = <NotDesigned route={route} onNavigate={navigate} />;
 
   return (
     <>
-      <FlowShell
-        route={route}
-        onNavigate={navigate}
-        panelTop={route === 'meetings' ? 16 : 32}
-        bleed={LIST_DETAIL.includes(route)}
-        aside={company ? <VickyChatPanel companyName={company.name} /> : undefined}
-      >
-        {page}
-      </FlowShell>
+      <SectionStyleContext.Provider value={sectionStyle}>
+        <FlowShell
+          route={route}
+          onNavigate={navigate}
+          panelTop={route === 'meetings' ? 16 : 32}
+          bleed={LIST_DETAIL.includes(route)}
+          aside={company ? <VickyChatPanel companyName={company.name} /> : undefined}
+        >
+          {page}
+        </FlowShell>
+      </SectionStyleContext.Provider>
+      {route.startsWith('settings/') ? (
+        <SectionStyleSwitcher value={sectionStyle} onChange={setSectionStyle} />
+      ) : null}
       <Snackbar
         open={message !== null}
         autoHideDuration={3000}
