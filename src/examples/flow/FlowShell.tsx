@@ -2,8 +2,6 @@ import React, {useState} from 'react';
 import {
   Avatar,
   Box,
-  ButtonBase,
-  Collapse,
   Divider,
   Drawer,
   List,
@@ -72,7 +70,7 @@ export type SettingsPage =
   | 'mcp';
 
 type NavItem = {route: Route; label: string; icon: string | 'vicky'};
-type NavSection = {label?: string; collapsible?: boolean; items: NavItem[]};
+type NavSection = {label?: string; items: NavItem[]};
 
 const MAIN_TOP: NavSection[] = [
   {
@@ -84,7 +82,6 @@ const MAIN_TOP: NavSection[] = [
   },
   {
     label: 'CRM',
-    collapsible: true,
     items: [
       {route: 'companies', label: 'Companies', icon: navCompanies},
       {route: 'people', label: 'People', icon: navPeople},
@@ -209,70 +206,40 @@ function NavLink({
   );
 }
 
-const sectionLabelSx = {
-  display: 'flex',
-  width: '100%',
-  height: 32,
-  px: 1,
-  py: 0.5,
-  borderRadius: `${radius.lg}px`,
-  justifyContent: 'flex-start',
-  typography: 'bodySmallRegular',
-  color: 'text.secondary',
-} as const;
-
-/** A Figma "Menu-list": optional section label (collapsible where Figma's is a button) + items. */
+/** A Figma "Menu-list": optional category label + items (Figma 8097:115318). */
 function Section({
   section,
   current,
   onNavigate,
-  compact,
 }: {
   section: NavSection;
   current: Route;
   onNavigate: (r: Route) => void;
-  /** Settings menu labels (Figma 8097:115318): Body/XSmall/Regular, 24px tall. */
-  compact?: boolean;
 }) {
-  const [open, setOpen] = useState(true);
-  const items = (
-    <List disablePadding sx={{display: 'flex', flexDirection: 'column', gap: 0.5}}>
-      {section.items.map(item => (
-        <NavLink
-          key={item.route}
-          item={item}
-          // Sub-pages (e.g. companies/strategio) keep their section selected.
-          active={current === item.route || current.startsWith(`${item.route}/`)}
-          onNavigate={onNavigate}
-        />
-      ))}
-    </List>
-  );
   return (
     <Box sx={{display: 'flex', flexDirection: 'column', gap: 0.5, width: '100%'}}>
       {section.label ? (
-        section.collapsible ? (
-          <ButtonBase
-            onClick={() => setOpen(o => !o)}
-            aria-expanded={open}
-            sx={{...sectionLabelSx, '&:hover': {bgcolor: 'action.hover'}}}
-          >
-            {section.label}
-          </ButtonBase>
-        ) : (
-          <Typography
-            component="div"
-            sx={{
-              ...sectionLabelSx,
-              alignItems: 'center',
-              ...(compact ? {height: 24, typography: 'bodyXsmallRegular'} : {}),
-            }}
-          >
-            {section.label}
-          </Typography>
-        )
+        // Category label: Body/XSmall/Regular, 24px tall, not collapsible.
+        <Typography
+          component="div"
+          variant="bodyXsmallRegular"
+          color="textSecondary"
+          sx={{display: 'flex', alignItems: 'center', height: 24, px: 1}}
+        >
+          {section.label}
+        </Typography>
       ) : null}
-      {section.collapsible ? <Collapse in={open}>{items}</Collapse> : items}
+      <List disablePadding sx={{display: 'flex', flexDirection: 'column', gap: 0.5}}>
+        {section.items.map(item => (
+          <NavLink
+            key={item.route}
+            item={item}
+            // Sub-pages (e.g. companies/strategio) keep their section selected.
+            active={current === item.route || current.startsWith(`${item.route}/`)}
+            onNavigate={onNavigate}
+          />
+        ))}
+      </List>
     </Box>
   );
 }
@@ -341,7 +308,7 @@ function SettingsSidebar({current, onNavigate}: {current: Route; onNavigate: (r:
       </Typography>
       <Box component="nav" aria-label="Settings" sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
         {SETTINGS.map((section, i) => (
-          <Section key={i} section={section} current={current} onNavigate={onNavigate} compact />
+          <Section key={i} section={section} current={current} onNavigate={onNavigate} />
         ))}
       </Box>
     </Box>

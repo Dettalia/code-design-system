@@ -23,6 +23,12 @@ export const Meetings: Story = {
     await expect(getComputedStyle(main).overflowY).toBe('auto');
     await expect(getComputedStyle(main).scrollbarWidth).toBe('none');
     await expect(main.offsetWidth - main.clientWidth).toBe(0);
+    // Main menu categories match the settings menu: 13px labels, not collapsible.
+    const nav = within(canvas.getByRole('navigation', {name: 'Main'}));
+    for (const label of ['CRM', 'Workspace']) {
+      await expect(nav.queryByRole('button', {name: label})).toBeNull();
+      await expect(getComputedStyle(nav.getByText(label)).fontSize).toBe('13px');
+    }
   },
 };
 
